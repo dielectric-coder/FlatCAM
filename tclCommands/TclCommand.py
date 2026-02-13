@@ -3,7 +3,7 @@ import re
 import FlatCAMApp
 import abc
 import collections
-from PyQt4 import QtCore
+from PyQt5 import QtCore
 from contextlib import contextmanager
 
 
@@ -181,13 +181,13 @@ class TclCommand(object):
 
         # check arguments
         idx = 0
-        arg_names_items = self.arg_names.items()
+        arg_names_items = list(self.arg_names.items())
         for argument in arguments:
             if len(self.arg_names) > idx:
                 key, arg_type = arg_names_items[idx]
                 try:
                     named_args[key] = arg_type(argument)
-                except Exception, e:
+                except Exception as e:
                     self.raise_tcl_error("Cannot cast named argument '%s' to type %s  with exception '%s'."
                                          % (key, arg_type, str(e)))
             else:
@@ -203,7 +203,7 @@ class TclCommand(object):
                     named_args[key] = self.option_types[key](options[key])
                 else:
                     named_args[key] = int(options[key])
-            except Exception, e:
+            except Exception as e:
                 self.raise_tcl_error("Cannot cast argument '-%s' to type '%s' with exception '%s'."
                                      % (key, self.option_types[key], str(e)))
 

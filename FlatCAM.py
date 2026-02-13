@@ -4,7 +4,7 @@ import sys
 if hasattr(sys, 'frozen'):
     os.environ['PATH'] = os.path.dirname(sys.executable) + os.pathsep + os.environ.get('PATH', '')
 
-from PyQt4 import QtGui, QtCore
+from PyQt5 import QtWidgets, QtGui, QtCore
 from FlatCAMApp import App
 from multiprocessing import freeze_support
 import VisPyPatches
@@ -18,7 +18,7 @@ def debug_trace():
     Set a tracepoint in the Python debugger that works with Qt
     :return: None
     """
-    from PyQt4.QtCore import pyqtRemoveInputHook
+    from PyQt5.QtCore import pyqtRemoveInputHook
     #from pdb import set_trace
     pyqtRemoveInputHook()
     #set_trace()
@@ -33,7 +33,7 @@ if __name__ == '__main__':
     debug_trace()
     VisPyPatches.apply_patches()
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     fc = App()
     sys.exit(app.exec_())
 

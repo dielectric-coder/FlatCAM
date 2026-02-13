@@ -9,7 +9,7 @@
 #from scipy import optimize
 #import traceback
 
-from cStringIO import StringIO
+from io import StringIO
 from numpy import arctan2, Inf, array, sqrt, pi, ceil, sin, cos, dot, float32, \
     transpose
 from numpy.linalg import solve, norm
@@ -2233,7 +2233,7 @@ class Gerber (Geometry):
             else:
                 self.solid_geometry = self.solid_geometry.difference(new_poly)
 
-        except Exception, err:
+        except Exception as err:
             ex_type, ex, tb = sys.exc_info()
             traceback.print_tb(tb)
             #print traceback.format_exc()

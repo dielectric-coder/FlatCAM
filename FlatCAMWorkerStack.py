@@ -1,4 +1,4 @@
-from PyQt4 import QtCore
+from PyQt5 import QtCore
 from FlatCAMWorker import Worker
 import multiprocessing
 
@@ -21,7 +21,7 @@ class WorkerStack(QtCore.QObject):
             thread = QtCore.QThread()
 
             worker.moveToThread(thread)
-            worker.connect(thread, QtCore.SIGNAL("started()"), worker.run)
+            thread.started.connect(worker.run)
             worker.task_completed.connect(self.on_task_completed)
 
             thread.start()

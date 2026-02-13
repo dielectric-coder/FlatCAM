@@ -42,7 +42,7 @@ def apply_patches():
         try:
             self._update_child_widget_dim()
         except Exception as e:
-            print e
+            print(e)
 
     Grid._prepare_draw = _prepare_draw
     Grid._update_clipper = _update_clipper

@@ -1,4 +1,4 @@
-from PyQt4 import QtGui, QtCore, Qt
+from PyQt5 import QtWidgets, QtGui, QtCore
 import FlatCAMApp
 from camlib import *
 from FlatCAMTool import FlatCAMTool
@@ -35,11 +35,11 @@ class BufferSelectionTool(FlatCAMTool):
         self.fcdraw = fcdraw
 
         ## Title
-        title_label = QtGui.QLabel("<font size=4><b>%s</b></font>" % self.toolName)
+        title_label = QtWidgets.QLabel("<font size=4><b>%s</b></font>" % self.toolName)
         self.layout.addWidget(title_label)
 
         ## Form Layout
-        form_layout = QtGui.QFormLayout()
+        form_layout = QtWidgets.QFormLayout()
         self.layout.addLayout(form_layout)
 
         ## Buffer distance
@@ -47,10 +47,10 @@ class BufferSelectionTool(FlatCAMTool):
         form_layout.addRow("Buffer distance:", self.buffer_distance_entry)
 
         ## Buttons
-        hlay = QtGui.QHBoxLayout()
+        hlay = QtWidgets.QHBoxLayout()
         self.layout.addLayout(hlay)
         hlay.addStretch()
-        self.buffer_button = QtGui.QPushButton("Buffer")
+        self.buffer_button = QtWidgets.QPushButton("Buffer")
         hlay.addWidget(self.buffer_button)
 
         self.layout.addStretch()
@@ -596,7 +596,7 @@ class FlatCAMDraw(QtCore.QObject):
         self.canvas = app.plotcanvas
 
         ### Drawing Toolbar ###
-        self.drawing_toolbar = QtGui.QToolBar('Drawing')
+        self.drawing_toolbar = QtWidgets.QToolBar('Drawing')
         self.drawing_toolbar.setDisabled(disabled)
         self.app.ui.addToolBar(self.drawing_toolbar)
         self.select_btn = self.drawing_toolbar.addAction(QtGui.QIcon('share/pointer32.png'), "Select 'Esc'")
@@ -614,19 +614,19 @@ class FlatCAMDraw(QtCore.QObject):
         self.delete_btn = self.drawing_toolbar.addAction(QtGui.QIcon('share/deleteshape32.png'), "Delete Shape '-'")
 
         ### Snap Toolbar ###
-        self.snap_toolbar = QtGui.QToolBar('Snap')
+        self.snap_toolbar = QtWidgets.QToolBar('Snap')
         self.grid_snap_btn = self.snap_toolbar.addAction(QtGui.QIcon('share/grid32.png'), 'Snap to grid')
-        self.grid_gap_x_entry = QtGui.QLineEdit()
+        self.grid_gap_x_entry = QtWidgets.QLineEdit()
         self.grid_gap_x_entry.setMaximumWidth(70)
         self.grid_gap_x_entry.setToolTip("Grid X distance")
         self.snap_toolbar.addWidget(self.grid_gap_x_entry)
-        self.grid_gap_y_entry = QtGui.QLineEdit()
+        self.grid_gap_y_entry = QtWidgets.QLineEdit()
         self.grid_gap_y_entry.setMaximumWidth(70)
         self.grid_gap_y_entry.setToolTip("Grid Y distante")
         self.snap_toolbar.addWidget(self.grid_gap_y_entry)
 
         self.corner_snap_btn = self.snap_toolbar.addAction(QtGui.QIcon('share/corner32.png'), 'Snap to corner')
-        self.snap_max_dist_entry = QtGui.QLineEdit()
+        self.snap_max_dist_entry = QtWidgets.QLineEdit()
         self.snap_max_dist_entry.setMaximumWidth(70)
         self.snap_max_dist_entry.setToolTip("Max. magnet distance")
         self.snap_toolbar.addWidget(self.snap_max_dist_entry)
@@ -635,7 +635,7 @@ class FlatCAMDraw(QtCore.QObject):
         self.app.ui.addToolBar(self.snap_toolbar)
 
         ### Application menu ###
-        self.menu = QtGui.QMenu("Drawing")
+        self.menu = QtWidgets.QMenu("Drawing")
         self.app.ui.menu.insertMenu(self.app.ui.menutoolaction, self.menu)
         # self.select_menuitem = self.menu.addAction(QtGui.QIcon('share/pointer16.png'), "Select 'Esc'")
         # self.add_circle_menuitem = self.menu.addAction(QtGui.QIcon('share/circle16.png'), 'Add Circle')

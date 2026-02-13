@@ -45,7 +45,7 @@ def _update_shape_buffers(data, triangulation='glu'):
                     gt = GLUTess()
                     tri_tris, tri_pts = gt.triangulate(simple)
                 else:
-                    print "Triangulation type '%s' isn't implemented. Drawing only edges." % triangulation
+                    print("Triangulation type '%s' isn't implemented. Drawing only edges." % triangulation)
 
             # Prepare polygon edges
             if color is not None:
@@ -308,7 +308,7 @@ class ShapeCollectionVisual(CompoundVisual):
                     mesh_vertices[data['layer']] += data['mesh_vertices']
                     mesh_colors[data['layer']] += data['mesh_colors']
                 except Exception as e:
-                    print "Data error", e
+                    print("Data error", e)
 
         # Updating meshes
         for i, mesh in enumerate(self._meshes):
@@ -351,7 +351,7 @@ class ShapeCollectionVisual(CompoundVisual):
                         self.data[i] = self.results[i].get()[0]             # Store translated data
                         del self.results[i]
                 except Exception as e:
-                    print e, indexes
+                    print(e, indexes)
 
         self.results_lock.release()
 
@@ -497,7 +497,7 @@ class TextCollectionVisual(TextVisual):
                     labels += data['text']
                     pos += data['pos']
                 except Exception as e:
-                    print "Data error", e
+                    print("Data error", e)
 
         # Updating text
         if len(labels) > 0:

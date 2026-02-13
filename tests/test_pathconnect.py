@@ -20,7 +20,7 @@ def mkstorage(paths):
 class PathConnectTest1(unittest.TestCase):
 
     def setUp(self):
-        print "PathConnectTest1.setUp()"
+        print("PathConnectTest1.setUp()")
         pass
 
     def test_simple_connect(self):
@@ -69,7 +69,7 @@ class PathConnectTest1(unittest.TestCase):
 
     def test_ring_interfere_connect(self):
         print
-        print "TEST STARTING ..."
+        print("TEST STARTING ...")
 
         paths = [
             LineString([[0, 0], [1, 1]]),

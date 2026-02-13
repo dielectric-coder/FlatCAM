@@ -61,7 +61,7 @@ class TclCommandOpenGerber(TclCommand.TclCommandSignaled):
                 app_obj.progress.emit(0)
                 self.raise_tcl_error('Failed to open file: %s' % filename)
 
-            except ParseError, e:
+            except ParseError as e:
                 app_obj.inform.emit("[error] Failed to parse file: %s, %s " % (filename, str(e)))
                 app_obj.progress.emit(0)
                 self.log.error(str(e))

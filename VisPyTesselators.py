@@ -24,7 +24,7 @@ class GLUTess:
         return (coords[0], coords[1], coords[2])
 
     def _on_error(self, errno):
-        print "GLUTess error:", errno
+        print("GLUTess error:", errno)
 
     def _on_end_primitive(self):
         pass

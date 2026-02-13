@@ -1,8 +1,8 @@
-from PyQt4 import QtGui, QtCore, Qt
+from PyQt5 import QtWidgets, QtGui, QtCore
 from GUIElements import *
 
 
-class FlatCAMGUI(QtGui.QMainWindow):
+class FlatCAMGUI(QtWidgets.QMainWindow):
 
     # Emitted when persistent window geometry needs to be retained
     geom_update = QtCore.pyqtSignal(int, int, int, int, int, name='geomUpdate')
@@ -21,22 +21,22 @@ class FlatCAMGUI(QtGui.QMainWindow):
         self.menufile = self.menu.addMenu('&File')
 
         # New
-        self.menufilenew = QtGui.QAction(QtGui.QIcon('share/file16.png'), '&New', self)
+        self.menufilenew = QtWidgets.QAction(QtGui.QIcon('share/file16.png'), '&New', self)
         self.menufile.addAction(self.menufilenew)
 
-        self.menufileopenproject = QtGui.QAction(QtGui.QIcon('share/folder16.png'), 'Open &Project ...', self)
+        self.menufileopenproject = QtWidgets.QAction(QtGui.QIcon('share/folder16.png'), 'Open &Project ...', self)
         self.menufile.addAction(self.menufileopenproject)
 
         # Open gerber ...
-        self.menufileopengerber = QtGui.QAction('Open &Gerber ...', self)
+        self.menufileopengerber = QtWidgets.QAction('Open &Gerber ...', self)
         self.menufile.addAction(self.menufileopengerber)
 
         # Open Excellon ...
-        self.menufileopenexcellon = QtGui.QAction('Open &Excellon ...', self)
+        self.menufileopenexcellon = QtWidgets.QAction('Open &Excellon ...', self)
         self.menufile.addAction(self.menufileopenexcellon)
 
         # Open G-Code ...
-        self.menufileopengcode = QtGui.QAction('Open G-&Code ...', self)
+        self.menufileopengcode = QtWidgets.QAction('Open G-&Code ...', self)
         self.menufile.addAction(self.menufileopengcode)
 
         # Recent
@@ -46,43 +46,43 @@ class FlatCAMGUI(QtGui.QMainWindow):
         self.menufile.addSeparator()
 
         # Import SVG ...
-        self.menufileimportsvg = QtGui.QAction('Import &SVG ...', self)
+        self.menufileimportsvg = QtWidgets.QAction('Import &SVG ...', self)
         self.menufile.addAction(self.menufileimportsvg)
 
         # Export SVG ...
-        self.menufileexportsvg = QtGui.QAction('Export &SVG ...', self)
+        self.menufileexportsvg = QtWidgets.QAction('Export &SVG ...', self)
         self.menufile.addAction(self.menufileexportsvg)
 
         # Separator
         self.menufile.addSeparator()
 
         # Save Defaults
-        self.menufilesavedefaults = QtGui.QAction('Save &Defaults', self)
+        self.menufilesavedefaults = QtWidgets.QAction('Save &Defaults', self)
         self.menufile.addAction(self.menufilesavedefaults)
 
         # Separator
         self.menufile.addSeparator()
 
         # Save Project
-        self.menufilesaveproject = QtGui.QAction(QtGui.QIcon('share/floppy16.png'), '&Save Project', self)
+        self.menufilesaveproject = QtWidgets.QAction(QtGui.QIcon('share/floppy16.png'), '&Save Project', self)
         self.menufile.addAction(self.menufilesaveproject)
 
         # Save Project As ...
-        self.menufilesaveprojectas = QtGui.QAction('Save Project &As ...', self)
+        self.menufilesaveprojectas = QtWidgets.QAction('Save Project &As ...', self)
         self.menufile.addAction(self.menufilesaveprojectas)
 
         # Save Project Copy ...
-        self.menufilesaveprojectcopy = QtGui.QAction('Save Project C&opy ...', self)
+        self.menufilesaveprojectcopy = QtWidgets.QAction('Save Project C&opy ...', self)
         self.menufile.addAction(self.menufilesaveprojectcopy)
 
         # Separator
         self.menufile.addSeparator()
 
         # Quit
-        exit_action = QtGui.QAction(QtGui.QIcon('share/power16.png'), 'E&xit', self)
+        exit_action = QtWidgets.QAction(QtGui.QIcon('share/power16.png'), 'E&xit', self)
         # exitAction.setShortcut('Ctrl+Q')
         # exitAction.setStatusTip('Exit application')
-        exit_action.triggered.connect(QtGui.qApp.quit)
+        exit_action.triggered.connect(QtWidgets.qApp.quit)
 
         self.menufile.addAction(exit_action)
 
@@ -115,7 +115,7 @@ class FlatCAMGUI(QtGui.QMainWindow):
 
         ### Tool ###
         #self.menutool = self.menu.addMenu('&Tool')
-        self.menutool = QtGui.QMenu('&Tool')
+        self.menutool = QtWidgets.QMenu('&Tool')
         self.menutoolaction = self.menu.addMenu(self.menutool)
         self.menutoolshell = self.menutool.addAction(QtGui.QIcon('share/shell16.png'), '&Command Line')
 
@@ -129,7 +129,7 @@ class FlatCAMGUI(QtGui.QMainWindow):
         ### Context menu ###
         ####################
 
-        self.menuproject = QtGui.QMenu()
+        self.menuproject = QtWidgets.QMenu()
         self.menuprojectenable = self.menuproject.addAction('Enable')
         self.menuprojectdisable = self.menuproject.addAction('Disable')
         self.menuproject.addSeparator()
@@ -140,13 +140,13 @@ class FlatCAMGUI(QtGui.QMainWindow):
         ###############
         ### Toolbar ###
         ###############
-        self.toolbarfile = QtGui.QToolBar('File')
+        self.toolbarfile = QtWidgets.QToolBar('File')
         self.addToolBar(self.toolbarfile)
         self.file_new_btn = self.toolbarfile.addAction(QtGui.QIcon('share/file32.png'), "New project")
         self.file_open_btn = self.toolbarfile.addAction(QtGui.QIcon('share/folder32.png'), "Open project")
         self.file_save_btn = self.toolbarfile.addAction(QtGui.QIcon('share/floppy32.png'), "Save project")
 
-        self.toolbargeo = QtGui.QToolBar('Edit')
+        self.toolbargeo = QtWidgets.QToolBar('Edit')
         self.addToolBar(self.toolbargeo)
 
         self.newgeo_btn = self.toolbargeo.addAction(QtGui.QIcon('share/new_geo32.png'), "New Blank Geometry")
@@ -156,7 +156,7 @@ class FlatCAMGUI(QtGui.QMainWindow):
         self.updategeo_btn.setEnabled(False)
         #self.canceledit_btn = self.toolbar.addAction(QtGui.QIcon('share/cancel_edit32.png'), "Cancel Edit")
 
-        self.toolbarview = QtGui.QToolBar('View')
+        self.toolbarview = QtWidgets.QToolBar('View')
         self.addToolBar(self.toolbarview)
         self.zoom_fit_btn = self.toolbarview.addAction(QtGui.QIcon('share/zoom_fit32.png'), "&Zoom Fit")
         self.zoom_in_btn = self.toolbarview.addAction(QtGui.QIcon('share/zoom_in32.png'), "&Zoom In")
@@ -164,51 +164,51 @@ class FlatCAMGUI(QtGui.QMainWindow):
         self.replot_btn = self.toolbarview.addAction(QtGui.QIcon('share/replot32.png'), "&Replot")
         self.clear_plot_btn = self.toolbarview.addAction(QtGui.QIcon('share/clear_plot32.png'), "&Clear plot")
 
-        self.toolbartools = QtGui.QToolBar('Tools')
+        self.toolbartools = QtWidgets.QToolBar('Tools')
         self.addToolBar(self.toolbartools)
         self.shell_btn = self.toolbartools.addAction(QtGui.QIcon('share/shell32.png'), "&Command Line")
 
         ################
         ### Splitter ###
         ################
-        self.splitter = QtGui.QSplitter()
+        self.splitter = QtWidgets.QSplitter()
         self.setCentralWidget(self.splitter)
 
         ################
         ### Notebook ###
         ################
-        self.notebook = QtGui.QTabWidget()
+        self.notebook = QtWidgets.QTabWidget()
         # self.notebook.setMinimumWidth(250)
 
         ### Projet ###
-        project_tab = QtGui.QWidget()
+        project_tab = QtWidgets.QWidget()
         # project_tab.setMinimumWidth(250)  # Hack
-        self.project_tab_layout = QtGui.QVBoxLayout(project_tab)
+        self.project_tab_layout = QtWidgets.QVBoxLayout(project_tab)
         self.project_tab_layout.setContentsMargins(2, 2, 2, 2)
         self.notebook.addTab(project_tab, "Project")
 
         ### Selected ###
-        self.selected_tab = QtGui.QWidget()
-        self.selected_tab_layout = QtGui.QVBoxLayout(self.selected_tab)
+        self.selected_tab = QtWidgets.QWidget()
+        self.selected_tab_layout = QtWidgets.QVBoxLayout(self.selected_tab)
         self.selected_tab_layout.setContentsMargins(2, 2, 2, 2)
         self.selected_scroll_area = VerticalScrollArea()
         self.selected_tab_layout.addWidget(self.selected_scroll_area)
         self.notebook.addTab(self.selected_tab, "Selected")
 
         ### Options ###
-        self.options_tab = QtGui.QWidget()
+        self.options_tab = QtWidgets.QWidget()
         self.options_tab.setContentsMargins(0, 0, 0, 0)
-        self.options_tab_layout = QtGui.QVBoxLayout(self.options_tab)
+        self.options_tab_layout = QtWidgets.QVBoxLayout(self.options_tab)
         self.options_tab_layout.setContentsMargins(2, 2, 2, 2)
 
-        hlay1 = QtGui.QHBoxLayout()
+        hlay1 = QtWidgets.QHBoxLayout()
         self.options_tab_layout.addLayout(hlay1)
 
-        self.icon = QtGui.QLabel()
+        self.icon = QtWidgets.QLabel()
         self.icon.setPixmap(QtGui.QPixmap('share/gear48.png'))
         hlay1.addWidget(self.icon)
 
-        self.options_combo = QtGui.QComboBox()
+        self.options_combo = QtWidgets.QComboBox()
         self.options_combo.addItem("APPLICATION DEFAULTS")
         self.options_combo.addItem("PROJECT OPTIONS")
         hlay1.addWidget(self.options_combo)
@@ -220,8 +220,8 @@ class FlatCAMGUI(QtGui.QMainWindow):
         self.notebook.addTab(self.options_tab, "Options")
 
         ### Tool ###
-        self.tool_tab = QtGui.QWidget()
-        self.tool_tab_layout = QtGui.QVBoxLayout(self.tool_tab)
+        self.tool_tab = QtWidgets.QWidget()
+        self.tool_tab_layout = QtWidgets.QVBoxLayout(self.tool_tab)
         self.tool_tab_layout.setContentsMargins(2, 2, 2, 2)
         self.notebook.addTab(self.tool_tab, "Tool")
         self.tool_scroll_area = VerticalScrollArea()
@@ -232,12 +232,11 @@ class FlatCAMGUI(QtGui.QMainWindow):
         ######################
         ### Plot and other ###
         ######################
-        right_widget = QtGui.QWidget()
+        right_widget = QtWidgets.QWidget()
         # right_widget.setContentsMargins(0, 0, 0, 0)
         self.splitter.addWidget(right_widget)
-        self.right_layout = QtGui.QVBoxLayout()
-        self.right_layout.setMargin(0)
-        # self.right_layout.setContentsMargins(0, 0, 0, 0)
+        self.right_layout = QtWidgets.QVBoxLayout()
+        self.right_layout.setContentsMargins(0, 0, 0, 0)
         right_widget.setLayout(self.right_layout)
 
         ################
@@ -245,23 +244,23 @@ class FlatCAMGUI(QtGui.QMainWindow):
         ################
         infobar = self.statusBar()
 
-        #self.info_label = QtGui.QLabel("Welcome to FlatCAM.")
-        #self.info_label.setFrameStyle(QtGui.QFrame.StyledPanel | QtGui.QFrame.Plain)
+        #self.info_label = QtWidgets.QLabel("Welcome to FlatCAM.")
+        #self.info_label.setFrameStyle(QtWidgets.QFrame.StyledPanel | QtWidgets.QFrame.Plain)
         #infobar.addWidget(self.info_label, stretch=1)
         self.fcinfo = FlatCAMInfoBar()
         infobar.addWidget(self.fcinfo, stretch=1)
 
-        self.position_label = QtGui.QLabel("")
-        #self.position_label.setFrameStyle(QtGui.QFrame.StyledPanel | QtGui.QFrame.Plain)
+        self.position_label = QtWidgets.QLabel("")
+        #self.position_label.setFrameStyle(QtWidgets.QFrame.StyledPanel | QtWidgets.QFrame.Plain)
         self.position_label.setMinimumWidth(110)
         infobar.addWidget(self.position_label)
 
-        self.units_label = QtGui.QLabel("[in]")
-        # self.units_label.setFrameStyle(QtGui.QFrame.StyledPanel | QtGui.QFrame.Plain)
-        self.units_label.setMargin(2)
+        self.units_label = QtWidgets.QLabel("[in]")
+        # self.units_label.setFrameStyle(QtWidgets.QFrame.StyledPanel | QtWidgets.QFrame.Plain)
+        self.units_label.setContentsMargins(2, 2, 2, 2)
         infobar.addWidget(self.units_label)
 
-        self.progress_bar = QtGui.QProgressBar()
+        self.progress_bar = QtWidgets.QProgressBar()
         self.progress_bar.setMinimum(0)
         self.progress_bar.setMaximum(100)
         #infobar.addWidget(self.progress_bar)
@@ -288,29 +287,29 @@ class FlatCAMGUI(QtGui.QMainWindow):
     def closeEvent(self, event):
         grect = self.geometry()
         self.geom_update.emit(grect.x(), grect.y(), grect.width(), grect.height(), self.splitter.sizes()[0])
-        QtGui.qApp.quit()
+        QtWidgets.qApp.quit()
 
 
-class FlatCAMActivityView(QtGui.QWidget):
+class FlatCAMActivityView(QtWidgets.QWidget):
 
     def __init__(self, parent=None):
         super(FlatCAMActivityView, self).__init__(parent=parent)
 
         self.setMinimumWidth(200)
 
-        self.icon = QtGui.QLabel(self)
+        self.icon = QtWidgets.QLabel(self)
         self.icon.setGeometry(0, 0, 12, 12)
         self.movie = QtGui.QMovie("share/active.gif")
         self.icon.setMovie(self.movie)
         #self.movie.start()
 
-        layout = QtGui.QHBoxLayout()
+        layout = QtWidgets.QHBoxLayout()
         layout.setContentsMargins(5, 0, 5, 0)
         layout.setAlignment(QtCore.Qt.AlignLeft)
         self.setLayout(layout)
 
         layout.addWidget(self.icon)
-        self.text = QtGui.QLabel(self)
+        self.text = QtWidgets.QLabel(self)
         self.text.setText("Idle.")
 
         layout.addWidget(self.text)
@@ -324,23 +323,23 @@ class FlatCAMActivityView(QtGui.QWidget):
         self.text.setText(msg)
 
 
-class FlatCAMInfoBar(QtGui.QWidget):
+class FlatCAMInfoBar(QtWidgets.QWidget):
 
     def __init__(self, parent=None):
         super(FlatCAMInfoBar, self).__init__(parent=parent)
 
-        self.icon = QtGui.QLabel(self)
+        self.icon = QtWidgets.QLabel(self)
         self.icon.setGeometry(0, 0, 12, 12)
         self.pmap = QtGui.QPixmap('share/graylight12.png')
         self.icon.setPixmap(self.pmap)
 
-        layout = QtGui.QHBoxLayout()
+        layout = QtWidgets.QHBoxLayout()
         layout.setContentsMargins(5, 0, 5, 0)
         self.setLayout(layout)
 
         layout.addWidget(self.icon)
 
-        self.text = QtGui.QLabel(self)
+        self.text = QtWidgets.QLabel(self)
         self.text.setText("Hello!")
         self.text.setToolTip("Hello!")
 
@@ -368,9 +367,9 @@ class FlatCAMInfoBar(QtGui.QWidget):
         self.set_text_(text)
 
 
-class OptionsGroupUI(QtGui.QGroupBox):
+class OptionsGroupUI(QtWidgets.QGroupBox):
     def __init__(self, title, parent=None):
-        QtGui.QGroupBox.__init__(self, title, parent=parent)
+        QtWidgets.QGroupBox.__init__(self, title, parent=parent)
         self.setStyleSheet("""
         QGroupBox
         {
@@ -379,7 +378,7 @@ class OptionsGroupUI(QtGui.QGroupBox):
         }
         """)
 
-        self.layout = QtGui.QVBoxLayout()
+        self.layout = QtWidgets.QVBoxLayout()
         self.setLayout(self.layout)
 
 
@@ -388,10 +387,10 @@ class GerberOptionsGroupUI(OptionsGroupUI):
         OptionsGroupUI.__init__(self, "Gerber Options", parent=parent)
 
         ## Plot options
-        self.plot_options_label = QtGui.QLabel("<b>Plot Options:</b>")
+        self.plot_options_label = QtWidgets.QLabel("<b>Plot Options:</b>")
         self.layout.addWidget(self.plot_options_label)
 
-        grid0 = QtGui.QGridLayout()
+        grid0 = QtWidgets.QGridLayout()
         self.layout.addLayout(grid0)
         # Plot CB
         self.plot_cb = FCCheckBox(label='Plot')
@@ -415,16 +414,16 @@ class GerberOptionsGroupUI(OptionsGroupUI):
         grid0.addWidget(self.multicolored_cb, 0, 2)
 
         ## Isolation Routing
-        self.isolation_routing_label = QtGui.QLabel("<b>Isolation Routing:</b>")
+        self.isolation_routing_label = QtWidgets.QLabel("<b>Isolation Routing:</b>")
         self.isolation_routing_label.setToolTip(
             "Create a Geometry object with\n"
             "toolpaths to cut outside polygons."
         )
         self.layout.addWidget(self.isolation_routing_label)
 
-        grid1 = QtGui.QGridLayout()
+        grid1 = QtWidgets.QGridLayout()
         self.layout.addLayout(grid1)
-        tdlabel = QtGui.QLabel('Tool dia:')
+        tdlabel = QtWidgets.QLabel('Tool dia:')
         tdlabel.setToolTip(
             "Diameter of the cutting tool."
         )
@@ -432,7 +431,7 @@ class GerberOptionsGroupUI(OptionsGroupUI):
         self.iso_tool_dia_entry = LengthEntry()
         grid1.addWidget(self.iso_tool_dia_entry, 0, 1)
 
-        passlabel = QtGui.QLabel('Width (# passes):')
+        passlabel = QtWidgets.QLabel('Width (# passes):')
         passlabel.setToolTip(
             "Width of the isolation gap in\n"
             "number (integer) of tool widths."
@@ -441,7 +440,7 @@ class GerberOptionsGroupUI(OptionsGroupUI):
         self.iso_width_entry = IntEntry()
         grid1.addWidget(self.iso_width_entry, 1, 1)
 
-        overlabel = QtGui.QLabel('Pass overlap:')
+        overlabel = QtWidgets.QLabel('Pass overlap:')
         overlabel.setToolTip(
             "How much (fraction of tool width)\n"
             "to overlap each pass."
@@ -457,16 +456,16 @@ class GerberOptionsGroupUI(OptionsGroupUI):
         grid1.addWidget(self.combine_passes_cb, 3, 0)
 
         ## Clear non-copper regions
-        self.clearcopper_label = QtGui.QLabel("<b>Clear non-copper:</b>")
+        self.clearcopper_label = QtWidgets.QLabel("<b>Clear non-copper:</b>")
         self.clearcopper_label.setToolTip(
             "Create a Geometry object with\n"
             "toolpaths to cut all non-copper regions."
         )
         self.layout.addWidget(self.clearcopper_label)
 
-        grid5 = QtGui.QGridLayout()
+        grid5 = QtWidgets.QGridLayout()
         self.layout.addLayout(grid5)
-        ncctdlabel = QtGui.QLabel('Tools dia:')
+        ncctdlabel = QtWidgets.QLabel('Tools dia:')
         ncctdlabel.setToolTip(
             "Diameters of the cutting tools, separated by ','"
         )
@@ -474,7 +473,7 @@ class GerberOptionsGroupUI(OptionsGroupUI):
         self.ncc_tool_dia_entry = FCEntry()
         grid5.addWidget(self.ncc_tool_dia_entry, 0, 1)
 
-        nccoverlabel = QtGui.QLabel('Overlap:')
+        nccoverlabel = QtWidgets.QLabel('Overlap:')
         nccoverlabel.setToolTip(
             "How much (fraction of tool width)\n"
             "to overlap each pass."
@@ -483,7 +482,7 @@ class GerberOptionsGroupUI(OptionsGroupUI):
         self.ncc_overlap_entry = FloatEntry()
         grid5.addWidget(self.ncc_overlap_entry, 1, 1)
 
-        nccmarginlabel = QtGui.QLabel('Margin:')
+        nccmarginlabel = QtWidgets.QLabel('Margin:')
         nccmarginlabel.setToolTip(
             "Bounding box margin."
         )
@@ -492,7 +491,7 @@ class GerberOptionsGroupUI(OptionsGroupUI):
         grid5.addWidget(self.ncc_margin_entry, 2, 1)
 
         ## Board cuttout
-        self.board_cutout_label = QtGui.QLabel("<b>Board cutout:</b>")
+        self.board_cutout_label = QtWidgets.QLabel("<b>Board cutout:</b>")
         self.board_cutout_label.setToolTip(
             "Create toolpaths to cut around\n"
             "the PCB and separate it from\n"
@@ -500,9 +499,9 @@ class GerberOptionsGroupUI(OptionsGroupUI):
         )
         self.layout.addWidget(self.board_cutout_label)
 
-        grid2 = QtGui.QGridLayout()
+        grid2 = QtWidgets.QGridLayout()
         self.layout.addLayout(grid2)
-        tdclabel = QtGui.QLabel('Tool dia:')
+        tdclabel = QtWidgets.QLabel('Tool dia:')
         tdclabel.setToolTip(
             "Diameter of the cutting tool."
         )
@@ -510,7 +509,7 @@ class GerberOptionsGroupUI(OptionsGroupUI):
         self.cutout_tooldia_entry = LengthEntry()
         grid2.addWidget(self.cutout_tooldia_entry, 0, 1)
 
-        marginlabel = QtGui.QLabel('Margin:')
+        marginlabel = QtWidgets.QLabel('Margin:')
         marginlabel.setToolTip(
             "Distance from objects at which\n"
             "to draw the cutout."
@@ -519,7 +518,7 @@ class GerberOptionsGroupUI(OptionsGroupUI):
         self.cutout_margin_entry = LengthEntry()
         grid2.addWidget(self.cutout_margin_entry, 1, 1)
 
-        gaplabel = QtGui.QLabel('Gap size:')
+        gaplabel = QtWidgets.QLabel('Gap size:')
         gaplabel.setToolTip(
             "Size of the gaps in the toolpath\n"
             "that will remain to hold the\n"
@@ -529,7 +528,7 @@ class GerberOptionsGroupUI(OptionsGroupUI):
         self.cutout_gap_entry = LengthEntry()
         grid2.addWidget(self.cutout_gap_entry, 2, 1)
 
-        gapslabel = QtGui.QLabel('Gaps:')
+        gapslabel = QtWidgets.QLabel('Gaps:')
         gapslabel.setToolTip(
             "Where to place the gaps, Top/Bottom\n"
             "Left/Rigt, or on all 4 sides."
@@ -541,7 +540,7 @@ class GerberOptionsGroupUI(OptionsGroupUI):
         grid2.addWidget(self.gaps_radio, 3, 1)
 
         ## Non-copper regions
-        self.noncopper_label = QtGui.QLabel("<b>Non-copper regions:</b>")
+        self.noncopper_label = QtWidgets.QLabel("<b>Non-copper regions:</b>")
         self.noncopper_label.setToolTip(
             "Create polygons covering the\n"
             "areas without copper on the PCB.\n"
@@ -551,11 +550,11 @@ class GerberOptionsGroupUI(OptionsGroupUI):
         )
         self.layout.addWidget(self.noncopper_label)
 
-        grid3 = QtGui.QGridLayout()
+        grid3 = QtWidgets.QGridLayout()
         self.layout.addLayout(grid3)
 
         # Margin
-        bmlabel = QtGui.QLabel('Boundary Margin:')
+        bmlabel = QtWidgets.QLabel('Boundary Margin:')
         bmlabel.setToolTip(
             "Specify the edge of the PCB\n"
             "by drawing a box around all\n"
@@ -575,13 +574,13 @@ class GerberOptionsGroupUI(OptionsGroupUI):
         grid3.addWidget(self.noncopper_rounded_cb, 1, 0, 1, 2)
 
         ## Bounding box
-        self.boundingbox_label = QtGui.QLabel('<b>Bounding Box:</b>')
+        self.boundingbox_label = QtWidgets.QLabel('<b>Bounding Box:</b>')
         self.layout.addWidget(self.boundingbox_label)
 
-        grid4 = QtGui.QGridLayout()
+        grid4 = QtWidgets.QGridLayout()
         self.layout.addLayout(grid4)
 
-        bbmargin = QtGui.QLabel('Boundary Margin:')
+        bbmargin = QtWidgets.QLabel('Boundary Margin:')
         bbmargin.setToolTip(
             "Distance of the edges of the box\n"
             "to the nearest polygon."
@@ -605,10 +604,10 @@ class ExcellonOptionsGroupUI(OptionsGroupUI):
         OptionsGroupUI.__init__(self, "Excellon Options", parent=parent)
 
         ## Plot options
-        self.plot_options_label = QtGui.QLabel("<b>Plot Options:</b>")
+        self.plot_options_label = QtWidgets.QLabel("<b>Plot Options:</b>")
         self.layout.addWidget(self.plot_options_label)
 
-        grid0 = QtGui.QGridLayout()
+        grid0 = QtWidgets.QGridLayout()
         self.layout.addLayout(grid0)
         self.plot_cb = FCCheckBox(label='Plot')
         self.plot_cb.setToolTip(
@@ -622,17 +621,17 @@ class ExcellonOptionsGroupUI(OptionsGroupUI):
         grid0.addWidget(self.solid_cb, 0, 1)
 
         ## Create CNC Job
-        self.cncjob_label = QtGui.QLabel('<b>Create CNC Job</b>')
+        self.cncjob_label = QtWidgets.QLabel('<b>Create CNC Job</b>')
         self.cncjob_label.setToolTip(
             "Create a CNC Job object\n"
             "for this drill object."
         )
         self.layout.addWidget(self.cncjob_label)
 
-        grid1 = QtGui.QGridLayout()
+        grid1 = QtWidgets.QGridLayout()
         self.layout.addLayout(grid1)
 
-        cutzlabel = QtGui.QLabel('Cut Z:')
+        cutzlabel = QtWidgets.QLabel('Cut Z:')
         cutzlabel.setToolTip(
             "Drill depth (negative)\n"
             "below the copper surface."
@@ -641,7 +640,7 @@ class ExcellonOptionsGroupUI(OptionsGroupUI):
         self.cutz_entry = LengthEntry()
         grid1.addWidget(self.cutz_entry, 0, 1)
 
-        travelzlabel = QtGui.QLabel('Travel Z:')
+        travelzlabel = QtWidgets.QLabel('Travel Z:')
         travelzlabel.setToolTip(
             "Tool height when travelling\n"
             "across the XY plane."
@@ -650,7 +649,7 @@ class ExcellonOptionsGroupUI(OptionsGroupUI):
         self.travelz_entry = LengthEntry()
         grid1.addWidget(self.travelz_entry, 1, 1)
 
-        frlabel = QtGui.QLabel('Feed rate:')
+        frlabel = QtWidgets.QLabel('Feed rate:')
         frlabel.setToolTip(
             "Tool speed while drilling\n"
             "(in units per minute)."
@@ -659,7 +658,7 @@ class ExcellonOptionsGroupUI(OptionsGroupUI):
         self.feedrate_entry = LengthEntry()
         grid1.addWidget(self.feedrate_entry, 2, 1)
 
-        toolchangezlabel = QtGui.QLabel('Toolchange Z:')
+        toolchangezlabel = QtWidgets.QLabel('Toolchange Z:')
         toolchangezlabel.setToolTip(
             "Tool Z where user can change drill bit\n"
         )
@@ -667,7 +666,7 @@ class ExcellonOptionsGroupUI(OptionsGroupUI):
         self.toolchangez_entry = LengthEntry()
         grid1.addWidget(self.toolchangez_entry, 3, 1)
 
-        spdlabel = QtGui.QLabel('Spindle speed:')
+        spdlabel = QtWidgets.QLabel('Spindle speed:')
         spdlabel.setToolTip(
             "Speed of the spindle\n"
             "in RPM (optional)"
@@ -677,15 +676,15 @@ class ExcellonOptionsGroupUI(OptionsGroupUI):
         grid1.addWidget(self.spindlespeed_entry, 4, 1)
 
         #### Milling Holes ####
-        self.mill_hole_label = QtGui.QLabel('<b>Mill Holes</b>')
+        self.mill_hole_label = QtWidgets.QLabel('<b>Mill Holes</b>')
         self.mill_hole_label.setToolTip(
             "Create Geometry for milling holes."
         )
         self.layout.addWidget(self.mill_hole_label)
 
-        grid1 = QtGui.QGridLayout()
+        grid1 = QtWidgets.QGridLayout()
         self.layout.addLayout(grid1)
-        tdlabel = QtGui.QLabel('Tool dia:')
+        tdlabel = QtWidgets.QLabel('Tool dia:')
         tdlabel.setToolTip(
             "Diameter of the cutting tool."
         )
@@ -699,7 +698,7 @@ class GeometryOptionsGroupUI(OptionsGroupUI):
         OptionsGroupUI.__init__(self, "Geometry Options", parent=parent)
 
         ## Plot options
-        self.plot_options_label = QtGui.QLabel("<b>Plot Options:</b>")
+        self.plot_options_label = QtWidgets.QLabel("<b>Plot Options:</b>")
         self.layout.addWidget(self.plot_options_label)
 
         # Plot CB
@@ -710,7 +709,7 @@ class GeometryOptionsGroupUI(OptionsGroupUI):
         self.layout.addWidget(self.plot_cb)
 
         ## Create CNC Job
-        self.cncjob_label = QtGui.QLabel('<b>Create CNC Job:</b>')
+        self.cncjob_label = QtWidgets.QLabel('<b>Create CNC Job:</b>')
         self.cncjob_label.setToolTip(
             "Create a CNC Job object\n"
             "tracing the contours of this\n"
@@ -718,10 +717,10 @@ class GeometryOptionsGroupUI(OptionsGroupUI):
         )
         self.layout.addWidget(self.cncjob_label)
 
-        grid1 = QtGui.QGridLayout()
+        grid1 = QtWidgets.QGridLayout()
         self.layout.addLayout(grid1)
 
-        cutzlabel = QtGui.QLabel('Cut Z:')
+        cutzlabel = QtWidgets.QLabel('Cut Z:')
         cutzlabel.setToolTip(
             "Cutting depth (negative)\n"
             "below the copper surface."
@@ -731,7 +730,7 @@ class GeometryOptionsGroupUI(OptionsGroupUI):
         grid1.addWidget(self.cutz_entry, 0, 1)
 
         # Travel Z
-        travelzlabel = QtGui.QLabel('Travel Z:')
+        travelzlabel = QtWidgets.QLabel('Travel Z:')
         travelzlabel.setToolTip(
             "Height of the tool when\n"
             "moving without cutting."
@@ -741,7 +740,7 @@ class GeometryOptionsGroupUI(OptionsGroupUI):
         grid1.addWidget(self.travelz_entry, 1, 1)
 
         # Feedrate
-        frlabel = QtGui.QLabel('Feed Rate:')
+        frlabel = QtWidgets.QLabel('Feed Rate:')
         frlabel.setToolTip(
             "Cutting speed in the XY\n"
             "plane in units per minute"
@@ -751,7 +750,7 @@ class GeometryOptionsGroupUI(OptionsGroupUI):
         grid1.addWidget(self.cncfeedrate_entry, 2, 1)
 
         # Tooldia
-        tdlabel = QtGui.QLabel('Tool dia:')
+        tdlabel = QtWidgets.QLabel('Tool dia:')
         tdlabel.setToolTip(
             "The diameter of the cutting\n"
             "tool (just for display)."
@@ -760,7 +759,7 @@ class GeometryOptionsGroupUI(OptionsGroupUI):
         self.cnctooldia_entry = LengthEntry()
         grid1.addWidget(self.cnctooldia_entry, 3, 1)
 
-        spdlabel = QtGui.QLabel('Spindle speed:')
+        spdlabel = QtWidgets.QLabel('Spindle speed:')
         spdlabel.setToolTip(
             "Speed of the spindle\n"
             "in RPM (optional)"
@@ -770,7 +769,7 @@ class GeometryOptionsGroupUI(OptionsGroupUI):
         grid1.addWidget(self.cncspindlespeed_entry, 4, 1)
 
         ## Paint area
-        self.paint_label = QtGui.QLabel('<b>Paint Area:</b>')
+        self.paint_label = QtWidgets.QLabel('<b>Paint Area:</b>')
         self.paint_label.setToolTip(
             "Creates tool paths to cover the\n"
             "whole area of a polygon (remove\n"
@@ -779,11 +778,11 @@ class GeometryOptionsGroupUI(OptionsGroupUI):
         )
         self.layout.addWidget(self.paint_label)
 
-        grid2 = QtGui.QGridLayout()
+        grid2 = QtWidgets.QGridLayout()
         self.layout.addLayout(grid2)
 
         # Tool dia
-        ptdlabel = QtGui.QLabel('Tool dia:')
+        ptdlabel = QtWidgets.QLabel('Tool dia:')
         ptdlabel.setToolTip(
             "Diameter of the tool to\n"
             "be used in the operation."
@@ -794,7 +793,7 @@ class GeometryOptionsGroupUI(OptionsGroupUI):
         grid2.addWidget(self.painttooldia_entry, 0, 1)
 
         # Overlap
-        ovlabel = QtGui.QLabel('Overlap:')
+        ovlabel = QtWidgets.QLabel('Overlap:')
         ovlabel.setToolTip(
             "How much (fraction) of the tool\n"
             "width to overlap each tool pass."
@@ -804,7 +803,7 @@ class GeometryOptionsGroupUI(OptionsGroupUI):
         grid2.addWidget(self.paintoverlap_entry, 1, 1)
 
         # Margin
-        marginlabel = QtGui.QLabel('Margin:')
+        marginlabel = QtWidgets.QLabel('Margin:')
         marginlabel.setToolTip(
             "Distance by which to avoid\n"
             "the edges of the polygon to\n"
@@ -820,14 +819,14 @@ class CNCJobOptionsGroupUI(OptionsGroupUI):
         OptionsGroupUI.__init__(self, "CNC Job Options", parent=None)
 
         ## Plot options
-        self.plot_options_label = QtGui.QLabel("<b>Plot Options:</b>")
+        self.plot_options_label = QtWidgets.QLabel("<b>Plot Options:</b>")
         self.layout.addWidget(self.plot_options_label)
 
-        grid0 = QtGui.QGridLayout()
+        grid0 = QtWidgets.QGridLayout()
         self.layout.addLayout(grid0)
 
         # Plot CB
-        # self.plot_cb = QtGui.QCheckBox('Plot')
+        # self.plot_cb = QtWidgets.QCheckBox('Plot')
         self.plot_cb = FCCheckBox('Plot')
         self.plot_cb.setToolTip(
             "Plot (show) this object."
@@ -835,7 +834,7 @@ class CNCJobOptionsGroupUI(OptionsGroupUI):
         grid0.addWidget(self.plot_cb, 0, 0)
 
         # Tool dia for plot
-        tdlabel = QtGui.QLabel('Tool dia:')
+        tdlabel = QtWidgets.QLabel('Tool dia:')
         tdlabel.setToolTip(
             "Diameter of the tool to be\n"
             "rendered in the plot."
@@ -845,7 +844,7 @@ class CNCJobOptionsGroupUI(OptionsGroupUI):
         grid0.addWidget(self.tooldia_entry, 1, 1)
 
         ## Export G-Code
-        self.export_gcode_label = QtGui.QLabel("<b>Export G-Code:</b>")
+        self.export_gcode_label = QtWidgets.QLabel("<b>Export G-Code:</b>")
         self.export_gcode_label.setToolTip(
             "Export and save G-Code to\n"
             "make this object to a file."
@@ -853,7 +852,7 @@ class CNCJobOptionsGroupUI(OptionsGroupUI):
         self.layout.addWidget(self.export_gcode_label)
 
         # Prepend to G-Code
-        prependlabel = QtGui.QLabel('Prepend to G-Code:')
+        prependlabel = QtWidgets.QLabel('Prepend to G-Code:')
         prependlabel.setToolTip(
             "Type here any G-Code commands you would\n"
             "like to add at the beginning of the G-Code file."
@@ -864,7 +863,7 @@ class CNCJobOptionsGroupUI(OptionsGroupUI):
         self.layout.addWidget(self.prepend_text)
 
         # Append text to G-Code
-        appendlabel = QtGui.QLabel('Append to G-Code:')
+        appendlabel = QtWidgets.QLabel('Append to G-Code:')
         appendlabel.setToolTip(
             "Type here any G-Code commands you would\n"
             "like to append to the generated file.\n"
@@ -876,15 +875,15 @@ class CNCJobOptionsGroupUI(OptionsGroupUI):
         self.layout.addWidget(self.append_text)
 
         # Dwell
-        grid1 = QtGui.QGridLayout()
+        grid1 = QtWidgets.QGridLayout()
         self.layout.addLayout(grid1)
 
-        dwelllabel = QtGui.QLabel('Dwell:')
+        dwelllabel = QtWidgets.QLabel('Dwell:')
         dwelllabel.setToolTip(
             "Pause to allow the spindle to reach its\n"
             "speed before cutting."
         )
-        dwelltime = QtGui.QLabel('Duration [sec.]:')
+        dwelltime = QtWidgets.QLabel('Duration [sec.]:')
         dwelltime.setToolTip(
             "Number of second to dwell."
         )
@@ -896,55 +895,55 @@ class CNCJobOptionsGroupUI(OptionsGroupUI):
         grid1.addWidget(self.dwelltime_cb, 1, 1)
 
 
-class GlobalOptionsUI(QtGui.QWidget):
+class GlobalOptionsUI(QtWidgets.QWidget):
     """
     This is the app and project options editor.
     """
     def __init__(self, parent=None):
-        QtGui.QWidget.__init__(self, parent=parent)
+        QtWidgets.QWidget.__init__(self, parent=parent)
 
-        layout = QtGui.QVBoxLayout()
+        layout = QtWidgets.QVBoxLayout()
         self.setLayout(layout)
 
-        hlay1 = QtGui.QHBoxLayout()
+        hlay1 = QtWidgets.QHBoxLayout()
         layout.addLayout(hlay1)
-        unitslabel = QtGui.QLabel('Units:')
+        unitslabel = QtWidgets.QLabel('Units:')
         hlay1.addWidget(unitslabel)
         self.units_radio = RadioSet([{'label': 'inch', 'value': 'IN'},
                                      {'label': 'mm', 'value': 'MM'}])
         hlay1.addWidget(self.units_radio)
 
         ####### Gerber #######
-        # gerberlabel = QtGui.QLabel('<b>Gerber Options</b>')
+        # gerberlabel = QtWidgets.QLabel('<b>Gerber Options</b>')
         # layout.addWidget(gerberlabel)
         self.gerber_group = GerberOptionsGroupUI()
-        # self.gerber_group.setFrameStyle(QtGui.QFrame.StyledPanel)
+        # self.gerber_group.setFrameStyle(QtWidgets.QFrame.StyledPanel)
         layout.addWidget(self.gerber_group)
 
         ####### Excellon #######
-        # excellonlabel = QtGui.QLabel('<b>Excellon Options</b>')
+        # excellonlabel = QtWidgets.QLabel('<b>Excellon Options</b>')
         # layout.addWidget(excellonlabel)
         self.excellon_group = ExcellonOptionsGroupUI()
-        # self.excellon_group.setFrameStyle(QtGui.QFrame.StyledPanel)
+        # self.excellon_group.setFrameStyle(QtWidgets.QFrame.StyledPanel)
         layout.addWidget(self.excellon_group)
 
         ####### Geometry #######
-        # geometrylabel = QtGui.QLabel('<b>Geometry Options</b>')
+        # geometrylabel = QtWidgets.QLabel('<b>Geometry Options</b>')
         # layout.addWidget(geometrylabel)
         self.geometry_group = GeometryOptionsGroupUI()
-        # self.geometry_group.setStyle(QtGui.QFrame.StyledPanel)
+        # self.geometry_group.setStyle(QtWidgets.QFrame.StyledPanel)
         layout.addWidget(self.geometry_group)
 
         ####### CNC #######
-        # cnclabel = QtGui.QLabel('<b>CNC Job Options</b>')
+        # cnclabel = QtWidgets.QLabel('<b>CNC Job Options</b>')
         # layout.addWidget(cnclabel)
         self.cncjob_group = CNCJobOptionsGroupUI()
-        # self.cncjob_group.setStyle(QtGui.QFrame.StyledPanel)
+        # self.cncjob_group.setStyle(QtWidgets.QFrame.StyledPanel)
         layout.addWidget(self.cncjob_group)
 
 # def main():
 #
-#     app = QtGui.QApplication(sys.argv)
+#     app = QtWidgets.QApplication(sys.argv)
 #     fc = FlatCAMGUI()
 #     sys.exit(app.exec_())
 #

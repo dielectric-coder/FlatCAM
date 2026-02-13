@@ -1,4 +1,4 @@
-from PyQt4 import QtGui, QtCore
+from PyQt5 import QtWidgets, QtGui, QtCore
 from copy import copy
 #import FlatCAMApp
 import re
@@ -8,7 +8,7 @@ log = logging.getLogger('base')
 
 EDIT_SIZE_HINT = 80
 
-class RadioSet(QtGui.QWidget):
+class RadioSet(QtWidgets.QWidget):
     def __init__(self, choices, orientation='horizontal', parent=None):
         """
         The choices are specified as a list of dictionaries containing:
@@ -23,14 +23,14 @@ class RadioSet(QtGui.QWidget):
         self.choices = copy(choices)
 
         if orientation == 'horizontal':
-            layout = QtGui.QHBoxLayout()
+            layout = QtWidgets.QHBoxLayout()
         else:
-            layout = QtGui.QVBoxLayout()
+            layout = QtWidgets.QVBoxLayout()
 
-        group = QtGui.QButtonGroup(self)
+        group = QtWidgets.QButtonGroup(self)
 
         for choice in self.choices:
-            choice['radio'] = QtGui.QRadioButton(choice['label'])
+            choice['radio'] = QtWidgets.QRadioButton(choice['label'])
             group.addButton(choice['radio'])
             layout.addWidget(choice['radio'], stretch=0)
             choice['radio'].toggled.connect(self.on_toggle)
@@ -63,7 +63,7 @@ class RadioSet(QtGui.QWidget):
         log.error("Value given is not part of this RadioSet: %s" % str(val))
 
 
-class LengthEntry(QtGui.QLineEdit):
+class LengthEntry(QtWidgets.QLineEdit):
     def __init__(self, output_units='IN', parent=None):
         super(LengthEntry, self).__init__(parent)
 
@@ -81,7 +81,7 @@ class LengthEntry(QtGui.QLineEdit):
     def returnPressed(self, *args, **kwargs):
         val = self.get_value()
         if val is not None:
-            self.set_text(QtCore.QString(str(val)))
+            self.set_text(str(val))
         else:
             log.warning("Could not interpret entry: %s" % self.get_text())
 
@@ -105,21 +105,21 @@ class LengthEntry(QtGui.QLineEdit):
             return None
 
     def set_value(self, val):
-        self.setText(QtCore.QString(str(val)))
+        self.setText(str(val))
 
     def sizeHint(self):
         default_hint_size = super(LengthEntry, self).sizeHint()
         return QtCore.QSize(EDIT_SIZE_HINT, default_hint_size.height())
 
 
-class FloatEntry(QtGui.QLineEdit):
+class FloatEntry(QtWidgets.QLineEdit):
     def __init__(self, parent=None):
         super(FloatEntry, self).__init__(parent)
 
     def returnPressed(self, *args, **kwargs):
         val = self.get_value()
         if val is not None:
-            self.set_text(QtCore.QString(str(val)))
+            self.set_text(str(val))
         else:
             log.warning("Could not interpret entry: %s" % self.text())
 
@@ -141,7 +141,7 @@ class FloatEntry(QtGui.QLineEdit):
         return QtCore.QSize(EDIT_SIZE_HINT, default_hint_size.height())
 
 
-class IntEntry(QtGui.QLineEdit):
+class IntEntry(QtWidgets.QLineEdit):
 
     def __init__(self, parent=None, allow_empty=False, empty_val=None):
         super(IntEntry, self).__init__(parent)
@@ -159,17 +159,17 @@ class IntEntry(QtGui.QLineEdit):
     def set_value(self, val):
 
         if val == self.empty_val and self.allow_empty:
-            self.setText(QtCore.QString(""))
+            self.setText("")
             return
 
-        self.setText(QtCore.QString(str(val)))
+        self.setText(str(val))
 
     def sizeHint(self):
         default_hint_size = super(IntEntry, self).sizeHint()
         return QtCore.QSize(EDIT_SIZE_HINT, default_hint_size.height())
 
 
-class FCEntry(QtGui.QLineEdit):
+class FCEntry(QtWidgets.QLineEdit):
     def __init__(self, parent=None):
         super(FCEntry, self).__init__(parent)
 
@@ -177,21 +177,21 @@ class FCEntry(QtGui.QLineEdit):
         return str(self.text())
 
     def set_value(self, val):
-        self.setText(QtCore.QString(str(val)))
+        self.setText(str(val))
 
     def sizeHint(self):
         default_hint_size = super(FCEntry, self).sizeHint()
         return QtCore.QSize(EDIT_SIZE_HINT, default_hint_size.height())
 
 
-class EvalEntry(QtGui.QLineEdit):
+class EvalEntry(QtWidgets.QLineEdit):
     def __init__(self, parent=None):
         super(EvalEntry, self).__init__(parent)
 
     def returnPressed(self, *args, **kwargs):
         val = self.get_value()
         if val is not None:
-            self.setText(QtCore.QString(str(val)))
+            self.setText(str(val))
         else:
             log.warning("Could not interpret entry: %s" % self.get_text())
 
@@ -204,16 +204,16 @@ class EvalEntry(QtGui.QLineEdit):
             return None
 
     def set_value(self, val):
-        self.setText(QtCore.QString(str(val)))
+        self.setText(str(val))
 
     def sizeHint(self):
         default_hint_size = super(EvalEntry, self).sizeHint()
         return QtCore.QSize(EDIT_SIZE_HINT, default_hint_size.height())
 
 
-class FCCheckBox(QtGui.QCheckBox):
+class FCCheckBox(QtWidgets.QCheckBox):
     def __init__(self, label='', parent=None):
-        super(FCCheckBox, self).__init__(QtCore.QString(label), parent)
+        super(FCCheckBox, self).__init__(label, parent)
 
     def get_value(self):
         return self.isChecked()
@@ -225,7 +225,7 @@ class FCCheckBox(QtGui.QCheckBox):
         self.set_value(not self.get_value())
 
 
-class FCTextArea(QtGui.QPlainTextEdit):
+class FCTextArea(QtWidgets.QPlainTextEdit):
     def __init__(self, parent=None):
         super(FCTextArea, self).__init__(parent)
 
@@ -240,14 +240,14 @@ class FCTextArea(QtGui.QPlainTextEdit):
         return QtCore.QSize(EDIT_SIZE_HINT, default_hint_size.height())
 
 
-class VerticalScrollArea(QtGui.QScrollArea):
+class VerticalScrollArea(QtWidgets.QScrollArea):
     """
-    This widget extends QtGui.QScrollArea to make a vertical-only
+    This widget extends QtWidgets.QScrollArea to make a vertical-only
     scroll area that also expands horizontally to accomodate
     its contents.
     """
     def __init__(self, parent=None):
-        QtGui.QScrollArea.__init__(self, parent=parent)
+        QtWidgets.QScrollArea.__init__(self, parent=parent)
         self.setWidgetResizable(True)
         self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
@@ -276,7 +276,7 @@ class VerticalScrollArea(QtGui.QScrollArea):
             # else:
             #     log.debug(" Scroll bar hidden")
             #     self.setMinimumWidth(self.widget().minimumSizeHint().width())
-        return QtGui.QWidget.eventFilter(self, source, event)
+        return QtWidgets.QWidget.eventFilter(self, source, event)
 
 
 class OptionalInputSection:
@@ -311,7 +311,7 @@ class OptionalInputSection:
                 widget.setEnabled(False)
 
 
-class FCTable(QtGui.QTableWidget):
+class FCTable(QtWidgets.QTableWidget):
     def __init__(self, parent=None):
         super(FCTable, self).__init__(parent)
 

@@ -1,5 +1,5 @@
 import unittest
-from PyQt4 import QtGui
+from PyQt5 import QtWidgets
 import sys
 from FlatCAMApp import App
 from FlatCAMObj import FlatCAMExcellon, FlatCAMCNCjob
@@ -21,7 +21,7 @@ class ExcellonFlowTestCase(unittest.TestCase):
     filename = 'case1.drl'
 
     def setUp(self):
-        self.app = QtGui.QApplication(sys.argv)
+        self.app = QtWidgets.QApplication(sys.argv)
 
         # Create App, keep app defaults (do not load
         # user-defined defaults).
@@ -36,7 +36,7 @@ class ExcellonFlowTestCase(unittest.TestCase):
     def test_flow(self):
         # Names of available objects.
         names = self.fc.collection.get_names()
-        print names
+        print(names)
 
         #--------------------------------------
         # Total of 1 objects.
@@ -65,7 +65,7 @@ class ExcellonFlowTestCase(unittest.TestCase):
         # TODO: Open GUI with double-click on object.
         # Opens the Object's GUI, populates it.
         excellon_obj.build_ui()
-        for option, value in excellon_obj.options.iteritems():
+        for option, value in excellon_obj.options.items():
             try:
                 form_field = excellon_obj.form_fields[option]
             except KeyError:
@@ -87,7 +87,7 @@ class ExcellonFlowTestCase(unittest.TestCase):
         form_field = excellon_obj.form_fields['feedrate']
         value = form_field.get_value()
         form_field.set_value(value * 1.1)  # Increase by 10%
-        print "'feedrate' == {}".format(value)
+        print("'feedrate' == {}".format(value))
 
         #--------------------------------------------------
         # Create GCode using all tools.
@@ -119,7 +119,7 @@ class ExcellonFlowTestCase(unittest.TestCase):
         self.assertEqual(value, form_value,
                          "Form value for '{}' == {} was not read into options"
                          "which has {}".format('feedrate', form_value, value))
-        print "'feedrate' == {}".format(value)
+        print("'feedrate' == {}".format(value))
 
         #---------------------------------------------
         # Check that only 1 object has been created.
@@ -160,4 +160,4 @@ class ExcellonFlowTestCase(unittest.TestCase):
         self.assertTrue(os.path.isfile(output_filename))
         os.remove(output_filename)
 
-        print names
+        print(names)

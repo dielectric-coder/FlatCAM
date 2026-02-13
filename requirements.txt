@@ -1,13 +1,15 @@
 # This file contains python only requirements to be installed with pip
-# Python packages that cannot be installed with pip (e.g. PyQT4) are not included.
+# Python packages that cannot be installed with pip (e.g. PyQt5) are not included.
 # Usage: pip install -r requirements.txt
-# Usage: python2 -m pip install -r requirements.txt
+# Usage: python3 -m pip install -r requirements.txt
 
-matplotlib==1.4
-shapely==1.7.1
+matplotlib>=3.5
+shapely>=1.7.1,<2.0
 simplejson
 rtree
 scipy
-svg.path==2.1.1
-pywin32==228
-cx_freeze==4.3.4
+svg.path>=2.1.1
+PyQt5>=5.15
+vispy>=0.9
+pywin32>=228; sys_platform == "win32"
+cx_freeze>=6.0; sys_platform == "win32"

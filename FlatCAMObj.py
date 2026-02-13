@@ -1,5 +1,5 @@
-from cStringIO import StringIO
-from PyQt4 import QtCore
+from io import StringIO
+from PyQt5 import QtCore
 from copy import copy
 from ObjectUI import *
 import FlatCAMApp
@@ -22,6 +22,8 @@ class FlatCAMObj(QtCore.QObject):
     in the GUI, can be plotted, and their options can be modified
     by the user in their respective forms.
     """
+
+    optionChanged = QtCore.pyqtSignal(str)
 
     # Instance of the application to which these are related.
     # The app should set this value.
@@ -88,7 +90,7 @@ class FlatCAMObj(QtCore.QObject):
         if key == 'plot':
             self.visible = self.options['plot']
 
-        self.emit(QtCore.SIGNAL("optionChanged"), key)
+        self.optionChanged.emit(key)
 
     def set_ui(self, ui):
         self.ui = ui
@@ -497,7 +499,7 @@ class FlatCAMGerber(FlatCAMObj, Gerber):
             FlatCAMApp.App.log.error("Overlap and margin values needed")
             return
 
-        print "non-copper clear button clicked", tools, over, margin
+        print("non-copper clear button clicked", tools, over, margin)
 
         # Sort tools in descending order
         tools.sort(reverse=True)
@@ -623,7 +625,7 @@ class FlatCAMGerber(FlatCAMObj, Gerber):
                 elif type(geom) is Polygon:
                     geom = Polygon(geom.exterior.coords[::-1], geom.interiors)
                 else:
-                    raise "Unexpected Geometry"
+                    raise Exception("Unexpected Geometry")
             return geom
 
         if combine:
@@ -821,20 +823,20 @@ class FlatCAMExcellon(FlatCAMObj, Excellon):
                     exc_final.drills.append({"point": point, "tool": drill['tool']})
                 toolsrework=dict()
                 max_numeric_tool=0
-                for toolname in exc.tools.iterkeys():
+                for toolname in exc.tools.keys():
                     numeric_tool=int(toolname)
                     if numeric_tool>max_numeric_tool:
                         max_numeric_tool=numeric_tool
                     toolsrework[exc.tools[toolname]['C']]=toolname
 
                 #exc_final as last because names from final tools will be used
-                for toolname in exc_final.tools.iterkeys():
+                for toolname in exc_final.tools.keys():
                     numeric_tool=int(toolname)
                     if numeric_tool>max_numeric_tool:
                         max_numeric_tool=numeric_tool
                     toolsrework[exc_final.tools[toolname]['C']]=toolname
 
-                for toolvalues in toolsrework.iterkeys():
+                for toolvalues in toolsrework.keys():
                     if toolsrework[toolvalues] in exc_final.tools:
                         if exc_final.tools[toolsrework[toolvalues]]!={"C": toolvalues}:
                             exc_final.tools[str(max_numeric_tool+1)]={"C": toolvalues}
@@ -1155,10 +1157,10 @@ class FlatCAMCNCjob(FlatCAMObj, CNCjob):
         self.read_form()
 
         try:
-            filename = QtGui.QFileDialog.getSaveFileName(caption="Export G-Code ...",
+            filename, _f = QtGui.QFileDialog.getSaveFileName(caption="Export G-Code ...",
                                                          directory=self.app.defaults["last_folder"])
         except TypeError:
-            filename = QtGui.QFileDialog.getSaveFileName(caption="Export G-Code ...")
+            filename, _f = QtGui.QFileDialog.getSaveFileName(caption="Export G-Code ...")
 
         preamble = str(self.ui.prepend_text.get_value())
         postamble = str(self.ui.append_text.get_value())

@@ -1,6 +1,6 @@
 import sys
 import unittest
-from PyQt4 import QtGui
+from PyQt5 import QtWidgets
 from FlatCAMApp import App
 from FlatCAMObj import FlatCAMGeometry, FlatCAMCNCjob
 from ObjectUI import GerberObjectUI, GeometryObjectUI
@@ -12,7 +12,7 @@ import tempfile
 class SVGFlowTestCase(unittest.TestCase):
 
     def setUp(self):
-        self.app = QtGui.QApplication(sys.argv)
+        self.app = QtWidgets.QApplication(sys.argv)
 
         # Create App, keep app defaults (do not load
         # user-defined defaults).
@@ -29,7 +29,7 @@ class SVGFlowTestCase(unittest.TestCase):
         self.fc.import_svg('tests/svg/' + self.filename)
 
         names = self.fc.collection.get_names()
-        print names
+        print(names)
 
         #--------------------------------------
         # Total of 1 objects.
@@ -58,7 +58,7 @@ class SVGFlowTestCase(unittest.TestCase):
         # TODO: Open GUI with double-click on object.
         # Opens the Object's GUI, populates it.
         geo_obj.build_ui()
-        for option, value in geo_obj.options.iteritems():
+        for option, value in geo_obj.options.items():
             try:
                 form_field = geo_obj.form_fields[option]
             except KeyError:
@@ -126,4 +126,4 @@ class SVGFlowTestCase(unittest.TestCase):
         self.assertTrue(os.path.isfile(output_filename))
         os.remove(output_filename)
 
-        print names
+        print(names)

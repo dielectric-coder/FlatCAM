@@ -1,5 +1,5 @@
 import numpy as np
-from PyQt4.QtGui import QPalette
+from PyQt5.QtGui import QPalette
 import vispy.scene as scene
 from vispy.scene.cameras.base_camera import BaseCamera
 import time

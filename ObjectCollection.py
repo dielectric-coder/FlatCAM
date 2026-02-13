@@ -2,10 +2,10 @@
 from FlatCAMObj import *
 import inspect  # TODO: Remove
 import FlatCAMApp
-from PyQt4 import Qt, QtGui, QtCore
+from PyQt5 import QtWidgets, QtGui, QtCore
 
 
-class KeySensitiveListView(QtGui.QTreeView):
+class KeySensitiveListView(QtWidgets.QTreeView):
     """
     QtGui.QListView extended to emit a signal on key press.
     """
@@ -13,7 +13,7 @@ class KeySensitiveListView(QtGui.QTreeView):
     def __init__(self, parent=None):
         super(KeySensitiveListView, self).__init__(parent)
         self.setHeaderHidden(True)
-        self.setEditTriggers(QtGui.QTreeView.SelectedClicked)
+        self.setEditTriggers(QtWidgets.QTreeView.SelectedClicked)
         # self.setRootIsDecorated(False)
         # self.setExpandsOnDoubleClick(False)
 
@@ -148,7 +148,7 @@ class ObjectCollection(QtCore.QAbstractItemModel):
 
         ### View
         self.view = KeySensitiveListView()
-        self.view.setSelectionMode(Qt.QAbstractItemView.ExtendedSelection)
+        self.view.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
         self.view.setModel(self)
         self.view.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
 
@@ -247,36 +247,36 @@ class ObjectCollection(QtCore.QAbstractItemModel):
 
     def data(self, index, role=None):
         if not index.isValid():
-            return QtCore.QVariant()
+            return None
 
-        if role in [Qt.Qt.DisplayRole, Qt.Qt.EditRole]:
+        if role in [QtCore.Qt.DisplayRole, QtCore.Qt.EditRole]:
             obj = index.internalPointer().obj
             if obj:
                 return obj.options["name"]
             else:
                 return index.internalPointer().data(index.column())
 
-        if role == Qt.Qt.ForegroundRole:
+        if role == QtCore.Qt.ForegroundRole:
             obj = index.internalPointer().obj
             if obj:
-                return Qt.QBrush(QtCore.Qt.black) if obj.options["plot"] else Qt.QBrush(QtCore.Qt.darkGray)
+                return QtGui.QBrush(QtCore.Qt.black) if obj.options["plot"] else QtGui.QBrush(QtCore.Qt.darkGray)
             else:
                 return index.internalPointer().data(index.column())
 
-        elif role == Qt.Qt.DecorationRole:
+        elif role == QtCore.Qt.DecorationRole:
             icon = index.internalPointer().icon
             if icon:
                 return icon
             else:
-                return Qt.QPixmap()
+                return QtGui.QPixmap()
         else:
-            return QtCore.QVariant()
+            return None
 
     def setData(self, index, data, role=None):
         if index.isValid():
             obj = index.internalPointer().obj
             if obj:
-                obj.options["name"] = data.toString()
+                obj.options["name"] = str(data)
                 obj.build_ui()
 
     def flags(self, index):
@@ -285,29 +285,29 @@ class ObjectCollection(QtCore.QAbstractItemModel):
 
         # Prevent groups from selection
         if not index.internalPointer().obj:
-            return Qt.Qt.ItemIsEnabled
+            return QtCore.Qt.ItemIsEnabled
         else:
-            return Qt.Qt.ItemIsEnabled | Qt.Qt.ItemIsSelectable | Qt.Qt.ItemIsEditable
+            return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEditable
 
         return QtCore.QAbstractItemModel.flags(self, index)
 
-    # def data(self, index, role=Qt.Qt.DisplayRole):
+    # def data(self, index, role=QtCore.Qt.DisplayRole):
     #     if not index.isValid() or not 0 <= index.row() < self.rowCount():
-    #         return QtCore.QVariant()
+    #         return None
     #     row = index.row()
-    #     if role == Qt.Qt.DisplayRole:
+    #     if role == QtCore.Qt.DisplayRole:
     #         return self.object_list[row].options["name"]
-    #     if role == Qt.Qt.DecorationRole:
+    #     if role == QtCore.Qt.DecorationRole:
     #         return self.icons[self.object_list[row].kind]
-    #     # if role == Qt.Qt.CheckStateRole:
+    #     # if role == QtCore.Qt.CheckStateRole:
     #     #     if row in self.checked_indexes:
-    #     #         return Qt.Qt.Checked
+    #     #         return QtCore.Qt.Checked
     #     #     else:
-    #     #         return Qt.Qt.Unchecked
+    #     #         return QtCore.Qt.Unchecked
 
     def print_list(self):
         for obj in self.get_list():
-            print obj
+            print(obj)
 
     def append(self, obj, active=False):
         FlatCAMApp.App.log.debug(str(inspect.stack()[1][3]) + " --> OC.append()")
@@ -338,7 +338,7 @@ class ObjectCollection(QtCore.QAbstractItemModel):
 
         # Required before appending (Qt MVC)
         group = self.group_items[obj.kind]
-        group_index = self.index(group.row(), 0, Qt.QModelIndex())
+        group_index = self.index(group.row(), 0, QtCore.QModelIndex())
         self.beginInsertRows(group_index, group.child_count(), group.child_count())
 
         # Append new item
@@ -415,7 +415,7 @@ class ObjectCollection(QtCore.QAbstractItemModel):
         active = selections[0].internalPointer()
         group = active.parent_item
 
-        self.beginRemoveRows(self.index(group.row(), 0, Qt.QModelIndex()), active.row(), active.row())
+        self.beginRemoveRows(self.index(group.row(), 0, QtCore.QModelIndex()), active.row(), active.row())
 
         group.remove_child(active)
 
@@ -467,10 +467,10 @@ class ObjectCollection(QtCore.QAbstractItemModel):
         item = obj.item
         group = self.group_items[obj.kind]
 
-        group_index = self.index(group.row(), 0, Qt.QModelIndex())
+        group_index = self.index(group.row(), 0, QtCore.QModelIndex())
         item_index = self.index(item.row(), 0, group_index)
 
-        self.view.selectionModel().select(item_index, QtGui.QItemSelectionModel.Select)
+        self.view.selectionModel().select(item_index, QtCore.QItemSelectionModel.Select)
 
     def set_inactive(self, name):
         """
@@ -484,10 +484,10 @@ class ObjectCollection(QtCore.QAbstractItemModel):
         item = obj.item
         group = self.group_items[obj.kind]
 
-        group_index = self.index(group.row(), 0, Qt.QModelIndex())
+        group_index = self.index(group.row(), 0, QtCore.QModelIndex())
         item_index = self.index(item.row(), 0, group_index)
 
-        self.view.selectionModel().select(item_index, QtGui.QItemSelectionModel.Deselect)
+        self.view.selectionModel().select(item_index, QtCore.QItemSelectionModel.Deselect)
 
     def set_all_inactive(self):
         """
@@ -552,4 +552,4 @@ class ObjectCollection(QtCore.QAbstractItemModel):
         return obj_list
 
     def update_view(self):
-        self.dataChanged.emit(Qt.QModelIndex(), Qt.QModelIndex())
+        self.dataChanged.emit(QtCore.QModelIndex(), QtCore.QModelIndex())
