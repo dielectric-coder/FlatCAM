@@ -350,7 +350,7 @@ class ObjectCollection(QtCore.QAbstractItemModel):
         self.endInsertRows()
 
         # Expand group
-        if group.child_count() is 1:
+        if group.child_count() == 1:
             self.view.setExpanded(group_index, True)
 
     def get_names(self):

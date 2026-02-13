@@ -240,7 +240,7 @@ class Geometry(object):
 
         ## If iterable, expand recursively.
         try:
-            for geo in geometry:
+            for geo in (geometry.geoms if hasattr(geometry, 'geoms') else geometry):
                 interiors.extend(self.get_interiors(geometry=geo))
 
         ## Not iterable, get the exterior if polygon.
@@ -267,7 +267,7 @@ class Geometry(object):
 
         ## If iterable, expand recursively.
         try:
-            for geo in geometry:
+            for geo in (geometry.geoms if hasattr(geometry, 'geoms') else geometry):
                 exteriors.extend(self.get_exteriors(geometry=geo))
 
         ## Not iterable, get the exterior if polygon.
@@ -477,7 +477,7 @@ class Geometry(object):
 
         # current can be a MultiPolygon
         try:
-            for p in current:
+            for p in (current.geoms if hasattr(current, 'geoms') else current):
                 geoms.insert(p.exterior)
                 for i in p.interiors:
                     geoms.insert(i)
@@ -496,7 +496,7 @@ class Geometry(object):
 
                 # current can be a MultiPolygon
                 try:
-                    for p in current:
+                    for p in (current.geoms if hasattr(current, 'geoms') else current):
                         geoms.insert(p.exterior)
                         for i in p.interiors:
                             geoms.insert(i)
@@ -1412,7 +1412,7 @@ class Gerber (Geometry):
         # Optional start with G02 or G03, optional end with D01 or D02 with
         # optional coordinates but at least one in any order.
         self.circ_re = re.compile(r'^(?:G0?([23]))?(?=.*X([\+-]?\d+))?(?=.*Y([\+-]?\d+))' +
-                                  '?(?=.*I([\+-]?\d+))?(?=.*J([\+-]?\d+))?[XYIJ][^D]*(?:D0([12]))?\*$')
+                                  r'?(?=.*I([\+-]?\d+))?(?=.*J([\+-]?\d+))?[XYIJ][^D]*(?:D0([12]))?\*$')
 
         # G01/2/3 Occurring without coordinates
         self.interp_re = re.compile(r'^(?:G0?([123]))\*')
@@ -2847,7 +2847,7 @@ class CNCjob(Geometry):
             log.debug("Tools 'all' and sorted are: %s" % str(tools))
         else:
             selected_tools = [x.strip() for x in tools.split(",")]  # we strip spaces and also separate the tools by ','
-            selected_tools = filter(lambda i: i in selected_tools, selected_tools)
+            selected_tools = list(filter(lambda i: i in selected_tools, selected_tools))
 
             # Create a sorted list of selected tools from the sorted_tools list
             tools = [i for i, j in sorted_tools for k in selected_tools if i == k]
@@ -3867,6 +3867,8 @@ def parse_gerber_number(strnumber, frac_digits):
 
 
 def autolist(obj):
+    if hasattr(obj, 'geoms'):
+        return list(obj.geoms)
     try:
         _ = iter(obj)
         return obj

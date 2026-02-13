@@ -796,7 +796,7 @@ class App(QtCore.QObject):
 
     def display_tcl_error(self, error, error_info=None):
         """
-        escape bracket [ with \  otherwise there is error
+        escape bracket [ with \\  otherwise there is error
         "ERROR: missing close-bracket" instead of real error
         :param error: it may be text  or exception
         :return: None
@@ -928,7 +928,7 @@ class App(QtCore.QObject):
         :return: None
         """
         # Type of message in brackets at the begining of the message.
-        match = re.search("\[([^\]]+)\](.*)", msg)
+        match = re.search(r"\[([^\]]+)\](.*)", msg)
         if match:
             level = match.group(1)
             msg_ = match.group(2)
