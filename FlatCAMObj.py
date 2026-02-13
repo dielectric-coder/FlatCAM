@@ -712,10 +712,14 @@ class FlatCAMGerber(FlatCAMObj, Gerber):
         geometry = self.solid_geometry
 
         # Make sure geometry is iterable.
-        try:
-            _ = iter(geometry)
-        except TypeError:
-            geometry = [geometry]
+        # In Shapely 2.0, MultiPolygon is not directly iterable; use .geoms.
+        if hasattr(geometry, 'geoms'):
+            geometry = list(geometry.geoms)
+        elif not isinstance(geometry, list):
+            try:
+                _ = iter(geometry)
+            except TypeError:
+                geometry = [geometry]
 
         def random_color():
             color = np.random.rand(4)
@@ -1061,10 +1065,14 @@ class FlatCAMExcellon(FlatCAMObj, Excellon):
         if not FlatCAMObj.plot(self):
             return
 
-        try:
-            _ = iter(self.solid_geometry)
-        except TypeError:
-            self.solid_geometry = [self.solid_geometry]
+        # Shapely 2.0: multi-geometries are not directly iterable; use .geoms
+        if hasattr(self.solid_geometry, 'geoms'):
+            self.solid_geometry = list(self.solid_geometry.geoms)
+        else:
+            try:
+                _ = iter(self.solid_geometry)
+            except TypeError:
+                self.solid_geometry = [self.solid_geometry]
 
         try:
             # Plot excellon (All polygons?)
@@ -1572,8 +1580,13 @@ class FlatCAMGeometry(FlatCAMObj, Geometry):
 
     def plot_element(self, element):
         try:
-            for sub_el in element:
-                self.plot_element(sub_el)
+            # Shapely 2.0: multi-geometries are not directly iterable; use .geoms
+            if hasattr(element, 'geoms'):
+                for sub_el in element.geoms:
+                    self.plot_element(sub_el)
+            else:
+                for sub_el in element:
+                    self.plot_element(sub_el)
 
         except TypeError:  # Element is not iterable...
             self.add_shape(shape=element, color='red', visible=self.options['plot'], layer=0)

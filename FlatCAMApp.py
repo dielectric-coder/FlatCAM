@@ -544,7 +544,7 @@ class App(QtCore.QObject):
         self.ui.menuprojectdelete.triggered.connect(self.on_delete)
         # Toolbar
         self.ui.file_new_btn.triggered.connect(self.on_file_new)
-        self.ui.file_open_btn.triggered.connect(self.on_file_openproject)
+        self.ui.file_open_btn.triggered.connect(self.on_file_open_auto)
         self.ui.file_save_btn.triggered.connect(self.on_file_saveproject)
         self.ui.zoom_fit_btn.triggered.connect(self.on_zoom_fit)
         self.ui.zoom_in_btn.triggered.connect(lambda: self.plotcanvas.zoom(1 / 1.5))
@@ -1730,6 +1730,70 @@ class App(QtCore.QObject):
 
         # Clear pool
         self.clear_pool()
+
+    def on_file_open_auto(self):
+        """
+        Toolbar callback that auto-detects file type by extension and
+        routes to the appropriate open handler.
+
+        :return: None
+        """
+        App.log.debug("on_file_open_auto()")
+
+        try:
+            filename, _f = QtWidgets.QFileDialog.getOpenFileName(
+                caption="Open File",
+                directory=self.get_last_folder(),
+                filter="All Supported Files (*.gbr *.ger *.gtl *.gbl *.gts *.gbs "
+                       "*.gtp *.gbp *.gto *.gbo *.gko *.gm1 *.gm3 *.cmp *.sol *.stc *.sts "
+                       "*.plc *.pls *.crc *.crs *.art "
+                       "*.drl *.xln *.drd *.exc *.txt "
+                       "*.nc *.gcode *.ngc *.cnc *.tap "
+                       "*.svg "
+                       "*.flatproj);;"
+                       "Gerber Files (*.gbr *.ger *.gtl *.gbl *.gts *.gbs "
+                       "*.gtp *.gbp *.gto *.gbo *.gko *.gm1 *.gm3 *.cmp *.sol *.stc *.sts "
+                       "*.plc *.pls *.crc *.crs *.art);;"
+                       "Excellon Files (*.drl *.xln *.drd *.exc *.txt);;"
+                       "G-Code Files (*.nc *.gcode *.ngc *.cnc *.tap);;"
+                       "SVG Files (*.svg);;"
+                       "FlatCAM Projects (*.flatproj);;"
+                       "All Files (*)")
+        except TypeError:
+            filename, _f = QtWidgets.QFileDialog.getOpenFileName(caption="Open File")
+
+        filename = str(filename)
+
+        if filename == "":
+            self.inform.emit("Open cancelled.")
+            return
+
+        ext = os.path.splitext(filename)[1].lower()
+
+        # Route by extension
+        gerber_exts = {'.gbr', '.ger', '.gtl', '.gbl', '.gts', '.gbs',
+                       '.gtp', '.gbp', '.gto', '.gbo', '.gko', '.gm1', '.gm3',
+                       '.cmp', '.sol', '.stc', '.sts', '.plc', '.pls',
+                       '.crc', '.crs', '.art'}
+        excellon_exts = {'.drl', '.xln', '.drd', '.exc'}
+        gcode_exts = {'.nc', '.gcode', '.ngc', '.cnc', '.tap'}
+
+        if ext in gerber_exts:
+            self.worker_task.emit({'fcn': self.open_gerber, 'params': [filename]})
+        elif ext in excellon_exts:
+            self.worker_task.emit({'fcn': self.open_excellon, 'params': [filename]})
+        elif ext in gcode_exts:
+            self.worker_task.emit({'fcn': self.open_gcode, 'params': [filename]})
+        elif ext == '.svg':
+            self.worker_task.emit({'fcn': self.open_gerber, 'params': [filename]})
+        elif ext == '.flatproj':
+            self.open_project(filename)
+        elif ext == '.txt':
+            # .txt files are typically Excellon drill files
+            self.worker_task.emit({'fcn': self.open_excellon, 'params': [filename]})
+        else:
+            # Default: try as Gerber
+            self.worker_task.emit({'fcn': self.open_gerber, 'params': [filename]})
 
     def on_fileopengerber(self):
         """

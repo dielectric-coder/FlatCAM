@@ -278,6 +278,8 @@ class ObjectCollection(QtCore.QAbstractItemModel):
             if obj:
                 obj.options["name"] = str(data)
                 obj.build_ui()
+                return True
+        return False
 
     def flags(self, index):
         if not index.isValid():
@@ -526,7 +528,9 @@ class ObjectCollection(QtCore.QAbstractItemModel):
         :param index: Index of the item in the list.
         :return: None
         """
-        index.internalPointer().obj.build_ui()
+        ptr = index.internalPointer()
+        if ptr and ptr.obj:
+            ptr.obj.build_ui()
 
     def delete_all(self):
         FlatCAMApp.App.log.debug(str(inspect.stack()[1][3]) + "--> OC.delete_all()")

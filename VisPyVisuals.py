@@ -57,7 +57,7 @@ def _update_shape_buffers(data, triangulation='glu'):
         if len(tri_pts) > 0 and len(tri_tris) > 0:
             mesh_tris += tri_tris
             mesh_vertices += tri_pts
-            mesh_colors += [Color(face_color).rgba] * (len(tri_tris) / 3)
+            mesh_colors += [Color(face_color).rgba] * (len(tri_tris) // 3)
 
         # Appending data for line
         if len(pts) > 0:
