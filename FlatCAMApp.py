@@ -868,7 +868,7 @@ class App(QtCore.QObject):
             result = self.tcl.eval(str(text))
             if result != 'None':
                 self.shell.append_output(result + '\n')
-        except Tkinter.TclError, e:
+        except tkinter.TclError as e:
             #this will display more precise answer if something in  TCL shell fail
             result = self.tcl.eval("set errorInfo")
             self.log.error("Exec command Exception: %s" % (result + '\n'))
@@ -3393,7 +3393,7 @@ class App(QtCore.QObject):
             if len(args) % 2 != 0:
                 return "Incomplete coordinate."
 
-            points = [[float(args[2*i]), float(args[2*i+1])] for i in range(len(args)/2)]
+            points = [[float(args[2*i]), float(args[2*i+1])] for i in range(len(args)//2)]
 
             try:
                 obj = self.collection.get_by_name(str(obj_name))
@@ -3412,7 +3412,7 @@ class App(QtCore.QObject):
             if len(args) % 2 != 0:
                 return "Incomplete coordinate."
 
-            points = [[float(args[2*i]), float(args[2*i+1])] for i in range(len(args)/2)]
+            points = [[float(args[2*i]), float(args[2*i+1])] for i in range(len(args)//2)]
 
             try:
                 obj = self.collection.get_by_name(str(obj_name))
