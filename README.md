@@ -38,12 +38,10 @@ python3 FlatCAM.py
 ### Installing Dependencies
 
 ```bash
-# Ubuntu/Debian
-sudo bash setup_ubuntu.sh
-
-# pip
 pip3 install -r requirements.txt
 ```
+
+Tested on Manjaro 26.2.
 
 ### Running Tests
 
