@@ -1,5 +1,5 @@
 from ObjectCollection import *
-import TclCommand
+from . import TclCommand
 
 
 class TclCommandOpenGerber(TclCommand.TclCommandSignaled):

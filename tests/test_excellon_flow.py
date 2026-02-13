@@ -41,13 +41,13 @@ class ExcellonFlowTestCase(unittest.TestCase):
         #--------------------------------------
         # Total of 1 objects.
         #--------------------------------------
-        self.assertEquals(len(names), 1,
+        self.assertEqual(len(names), 1,
                           "Expected 1 object, found %d" % len(names))
 
         #--------------------------------------
         # Object's name matches the file name.
         #--------------------------------------
-        self.assertEquals(names[0], self.filename,
+        self.assertEqual(names[0], self.filename,
                           "Expected name == %s, got %s" % (self.filename, names[0]))
 
         #---------------------------------------

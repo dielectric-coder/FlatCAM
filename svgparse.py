@@ -22,7 +22,7 @@
 import xml.etree.ElementTree as ET
 import re
 import itertools
-from svg.path import Path, Line, Arc, CubicBezier, QuadraticBezier, parse_path
+from svg.path import Path, Line, Arc, CubicBezier, QuadraticBezier, Close, parse_path
 from shapely.geometry import LinearRing, LineString, Point
 from shapely.affinity import translate, rotate, scale, skew, affine_transform
 import numpy as np
@@ -108,7 +108,7 @@ def path2shapely(path, res=1.0):
         log.warning("I don't know what this is:", component)
         continue
 
-    if path.closed:
+    if any(isinstance(seg, Close) for seg in path):
         return LinearRing(points)
     else:
         return LineString(points)

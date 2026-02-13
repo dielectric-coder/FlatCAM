@@ -7,13 +7,13 @@ from ObjectUI import LengthEntry
 from shapely.geometry import Polygon, LineString, Point, LinearRing
 from shapely.geometry import MultiPoint, MultiPolygon
 from shapely.geometry import box as shply_box
-from shapely.ops import cascaded_union, unary_union
+from shapely.ops import unary_union
 import shapely.affinity as affinity
 from shapely.wkt import loads as sloads
 from shapely.wkt import dumps as sdumps
 from shapely.geometry.base import BaseGeometry
 
-from numpy import arctan2, Inf, array, sqrt, pi, ceil, sin, cos, sign, dot
+from numpy import arctan2, inf as Inf, array, sqrt, pi, ceil, sin, cos, sign, dot
 from numpy.linalg import solve
 
 #from mpl_toolkits.axes_grid.anchored_artists import AnchoredDrawingArea
@@ -853,7 +853,7 @@ class FlatCAMDraw(QtCore.QObject):
     def cutpath(self):
         selected = self.get_selected()
         tools = selected[1:]
-        toolgeo = cascaded_union([shp.geo for shp in tools])
+        toolgeo = unary_union([shp.geo for shp in tools])
 
         target = selected[0]
         if type(target.geo) == Polygon:
@@ -1301,7 +1301,7 @@ class FlatCAMDraw(QtCore.QObject):
         :return: None.
         """
 
-        results = cascaded_union([t.geo for t in self.get_selected()])
+        results = unary_union([t.geo for t in self.get_selected()])
 
         # Delete originals.
         for_deletion = [s for s in self.get_selected()]
@@ -1344,7 +1344,7 @@ class FlatCAMDraw(QtCore.QObject):
     def subtract(self):
         selected = self.get_selected()
         tools = selected[1:]
-        toolgeo = cascaded_union([shp.geo for shp in tools])
+        toolgeo = unary_union([shp.geo for shp in tools])
         result = selected[0].geo.difference(toolgeo)
 
         self.delete_shape(selected[0])
@@ -1363,7 +1363,7 @@ class FlatCAMDraw(QtCore.QObject):
             self.app.inform.emit("[warning] Invalid distance for buffering.")
             return
 
-        pre_buffer = cascaded_union([t.geo for t in selected])
+        pre_buffer = unary_union([t.geo for t in selected])
         results = pre_buffer.buffer(buf_distance)
         self.add_shape(DrawToolShape(results))
 

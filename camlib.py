@@ -10,7 +10,7 @@
 #import traceback
 
 from io import StringIO
-from numpy import arctan2, Inf, array, sqrt, pi, ceil, sin, cos, dot, float32, \
+from numpy import arctan2, inf as Inf, array, sqrt, pi, ceil, sin, cos, dot, float32, \
     transpose
 from numpy.linalg import solve, norm
 import re
@@ -28,7 +28,7 @@ from rtree import index as rtindex
 from shapely.geometry import Polygon, LineString, Point, LinearRing
 from shapely.geometry import MultiPoint, MultiPolygon
 from shapely.geometry import box as shply_box
-from shapely.ops import cascaded_union
+from shapely.ops import unary_union as cascaded_union
 import shapely.affinity as affinity
 from shapely.wkt import loads as sloads
 from shapely.wkt import dumps as sdumps
@@ -297,7 +297,7 @@ class Geometry(object):
 
         ## If iterable, expand recursively.
         try:
-            for geo in geometry:
+            for geo in (geometry.geoms if hasattr(geometry, 'geoms') else geometry):
                 self.flatten(geometry=geo,
                              reset=False,
                              pathonly=pathonly)
@@ -673,7 +673,7 @@ class Geometry(object):
                 # then reverse coordinates.
                 # but prefer the first one if last == first
                 if pt != candidate.coords[0] and pt == candidate.coords[-1]:
-                    candidate.coords = list(candidate.coords)[::-1]
+                    candidate = LineString(list(candidate.coords)[::-1])
 
                 # Straight line from current_pt to pt.
                 # Is the toolpath inside the geometry?
@@ -684,7 +684,7 @@ class Geometry(object):
                     #log.debug("Walk to path #%d is inside. Joining." % path_count)
 
                     # Completely inside. Append...
-                    geo.coords = list(geo.coords) + list(candidate.coords)
+                    geo = LineString(list(geo.coords) + list(candidate.coords))
                     # try:
                     #     last = optimized_paths[-1]
                     #     last.coords = list(last.coords) + list(geo.coords)
@@ -751,22 +751,22 @@ class Geometry(object):
                 if type(left) == LineString:
                     if left.coords[0] == geo.coords[0]:
                         storage.remove(left)
-                        geo.coords = list(geo.coords)[::-1] + list(left.coords)
+                        geo = LineString(list(geo.coords)[::-1] + list(left.coords))
                         continue
 
                     if left.coords[-1] == geo.coords[0]:
                         storage.remove(left)
-                        geo.coords = list(left.coords) + list(geo.coords)
+                        geo = LineString(list(left.coords) + list(geo.coords))
                         continue
 
                     if left.coords[0] == geo.coords[-1]:
                         storage.remove(left)
-                        geo.coords = list(geo.coords) + list(left.coords)
+                        geo = LineString(list(geo.coords) + list(left.coords))
                         continue
 
                     if left.coords[-1] == geo.coords[-1]:
                         storage.remove(left)
-                        geo.coords = list(geo.coords) + list(left.coords)[::-1]
+                        geo = LineString(list(geo.coords) + list(left.coords)[::-1])
                         continue
 
                 _, right = storage.nearest(geo.coords[-1])
@@ -777,22 +777,22 @@ class Geometry(object):
                 if type(right) == LineString:
                     if right.coords[0] == geo.coords[-1]:
                         storage.remove(right)
-                        geo.coords = list(geo.coords) + list(right.coords)
+                        geo = LineString(list(geo.coords) + list(right.coords))
                         continue
 
                     if right.coords[-1] == geo.coords[-1]:
                         storage.remove(right)
-                        geo.coords = list(geo.coords) + list(right.coords)[::-1]
+                        geo = LineString(list(geo.coords) + list(right.coords)[::-1])
                         continue
 
                     if right.coords[0] == geo.coords[0]:
                         storage.remove(right)
-                        geo.coords = list(geo.coords)[::-1] + list(right.coords)
+                        geo = LineString(list(geo.coords)[::-1] + list(right.coords))
                         continue
 
                     if right.coords[-1] == geo.coords[0]:
                         storage.remove(right)
-                        geo.coords = list(left.coords) + list(geo.coords)
+                        geo = LineString(list(left.coords) + list(geo.coords))
                         continue
 
                 # right is either a LinearRing or it does not connect
@@ -2841,7 +2841,7 @@ class CNCjob(Geometry):
         
         # sort the tools list by the second item in tuple (here we have a dict with diameter of the tool)
         # so we actually are sorting the tools by diameter
-        sorted_tools = sorted(exobj.tools.items(), key = lambda x: x[1])
+        sorted_tools = sorted(exobj.tools.items(), key = lambda x: x[1]['C'])
         if tools == "all":
             tools = [i[0] for i in sorted_tools]   # we get a array of ordered tools
             log.debug("Tools 'all' and sorted are: %s" % str(tools))
@@ -3001,7 +3001,7 @@ class CNCjob(Geometry):
                 # but prefer the first one if last point == first point
                 # then reverse coordinates.
                 if pt != geo.coords[0] and pt == geo.coords[-1]:
-                    geo.coords = list(geo.coords)[::-1]
+                    geo = LineString(list(geo.coords)[::-1])
 
                 #---------- Single depth/pass --------
                 if not multidepth:
@@ -3057,13 +3057,13 @@ class CNCjob(Geometry):
                         # Reverse coordinates if not a loop so we can continue
                         # cutting without returning to the beginhing.
                         if type(geo) == LineString:
-                            geo.coords = list(geo.coords)[::-1]
+                            geo = LineString(list(geo.coords)[::-1])
                             reverse = True
 
                     # If geometry is reversed, revert.
                     if reverse:
                         if type(geo) == LineString:
-                            geo.coords = list(geo.coords)[::-1]
+                            geo = LineString(list(geo.coords)[::-1])
 
                     # Lift the tool
                     self.gcode += "G00 Z%.4f\n" % self.z_move
@@ -3962,7 +3962,7 @@ class FlatCAMRTree(object):
         :param pt:
         :return:
         """
-        return self.rti.nearest(pt, objects=True).next()
+        return next(self.rti.nearest(pt, objects=True))
 
 
 class FlatCAMRTreeStorage(FlatCAMRTree):

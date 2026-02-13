@@ -1,5 +1,5 @@
 from ObjectCollection import *
-import TclCommand
+from . import TclCommand
 
 
 class TclCommandExteriors(TclCommand.TclCommandSignaled):

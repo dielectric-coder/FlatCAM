@@ -1,6 +1,6 @@
 from ObjectCollection import *
 from PyQt5 import QtCore
-import TclCommand
+from . import TclCommand
 
 
 class TclCommandNew(TclCommand.TclCommand):

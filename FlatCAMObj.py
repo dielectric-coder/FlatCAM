@@ -619,7 +619,7 @@ class FlatCAMGerber(FlatCAMObj, Gerber):
             if invert:
                 if type(geom) is MultiPolygon:
                     pl = []
-                    for p in geom:
+                    for p in geom.geoms:
                         pl.append(Polygon(p.exterior.coords[::-1], p.interiors))
                     geom = MultiPolygon(pl)
                 elif type(geom) is Polygon:
@@ -857,10 +857,10 @@ class FlatCAMExcellon(FlatCAMObj, Excellon):
         self.ui.tools_table.setSortingEnabled(False)
         i = 0
         for tool in self.tools:
-            id = QtGui.QTableWidgetItem(tool)
+            id = QtWidgets.QTableWidgetItem(tool)
             id.setFlags(QtCore.Qt.ItemIsSelectable | QtCore.Qt.ItemIsEnabled)
             self.ui.tools_table.setItem(i, 0, id)  # Tool name/id
-            dia = QtGui.QTableWidgetItem(str(self.tools[tool]['C']))
+            dia = QtWidgets.QTableWidgetItem(str(self.tools[tool]['C']))
             dia.setFlags(QtCore.Qt.ItemIsEnabled)
             self.ui.tools_table.setItem(i, 1, dia)  # Diameter
             i += 1
@@ -1157,10 +1157,10 @@ class FlatCAMCNCjob(FlatCAMObj, CNCjob):
         self.read_form()
 
         try:
-            filename, _f = QtGui.QFileDialog.getSaveFileName(caption="Export G-Code ...",
+            filename, _f = QtWidgets.QFileDialog.getSaveFileName(caption="Export G-Code ...",
                                                          directory=self.app.defaults["last_folder"])
         except TypeError:
-            filename, _f = QtGui.QFileDialog.getSaveFileName(caption="Export G-Code ...")
+            filename, _f = QtWidgets.QFileDialog.getSaveFileName(caption="Export G-Code ...")
 
         preamble = str(self.ui.prepend_text.get_value())
         postamble = str(self.ui.append_text.get_value())
@@ -1199,7 +1199,7 @@ class FlatCAMCNCjob(FlatCAMObj, CNCjob):
 
             yield line
 
-        raise StopIteration
+        return
 
     def export_gcode(self, filename, preamble='', postamble=''):
 

@@ -100,7 +100,7 @@ def _linestring_to_segments(arr):
     :return: numpy.array
         Line segments
     """
-    return [arr[i / 2] for i in range(0, len(arr) * 2)][1:-1]
+    return [arr[i // 2] for i in range(0, len(arr) * 2)][1:-1]
 
 
 class ShapeGroup(object):
@@ -197,7 +197,7 @@ class ShapeCollectionVisual(CompoundVisual):
         self._line_width = line_width
         self._triangulation = triangulation
 
-        visuals_ = [self._lines[i / 2] if i % 2 else self._meshes[i / 2] for i in range(0, layers * 2)]
+        visuals_ = [self._lines[i // 2] if i % 2 else self._meshes[i // 2] for i in range(0, layers * 2)]
 
         CompoundVisual.__init__(self, visuals_, **kwargs)
 
@@ -326,7 +326,7 @@ class ShapeCollectionVisual(CompoundVisual):
             if len(line_pts[i]) > 0:
                 line.set_data(np.asarray(line_pts[i]), np.asarray(line_colors[i]), self._line_width, 'segments')
             else:
-                line.clear_data()
+                line.set_data(np.zeros((1, 2)))
 
             line._bounds_changed()
 
@@ -343,7 +343,7 @@ class ShapeCollectionVisual(CompoundVisual):
         # Only one thread can update data
         self.results_lock.acquire(True)
 
-        for i in self.data.keys() if not indexes else indexes:
+        for i in list(self.data.keys()) if not indexes else indexes:
             if i in self.results.keys():
                 try:
                     self.results[i].wait()                                  # Wait for process results
