@@ -9,18 +9,66 @@ CAD program, and create G-Code for Isolation routing.
 
 ============================================
 
-Build instructions here:
+## Python 3 / PyQt5 Port
 
-https://github.com/Denvi/FlatCAM/releases/tag/v8.4-dev
+This fork has been ported from **Python 2.7 / PyQt4** to **Python 3 / PyQt5** with the following updates:
 
-This fork features:
+- **Python 3** syntax and standard library (print functions, `except as`, `io.StringIO`, `tkinter`, `urllib.request/parse`, `html.escape`, integer division, etc.)
+- **PyQt5** with `QtWidgets` / `QtGui` / `QtCore` split, new-style signals/slots, updated `QFileDialog` API
+- **Shapely 2.0+** compatibility (`.geoms` for multi-geometry iteration, `unary_union`, immutable coordinates)
+- **VisPy 0.9+** with conditional monkey-patches for modern API
+- **NumPy 2.0+** compatibility (`numpy.inf`)
+- Light Fusion Qt style override for consistent icon visibility across desktop themes
+- Smart file-type auto-detection on the toolbar Open button
+
+### Requirements
+
+- Python 3.8+
+- PyQt5 >= 5.15
+- VisPy >= 0.9
+- Shapely >= 1.7.1
+- NumPy, SciPy, Matplotlib, Rtree, svg.path, simplejson
+
+### Running
+
+```bash
+python3 FlatCAM.py
+```
+
+### Installing Dependencies
+
+```bash
+# Ubuntu/Debian
+sudo bash setup_ubuntu.sh
+
+# pip
+pip3 install -r requirements.txt
+```
+
+### Running Tests
+
+```bash
+# All tests
+python3 -m unittest discover tests
+
+# Single test file
+python3 -m unittest tests.test_excellon
+python3 -m unittest tests.test_gerber_flow
+
+# Tcl command tests
+python3 -m unittest discover tests/test_tclCommands
+```
+
+============================================
+
+## Features
 
 - "Clear non-copper" feature, supporting multi-tool work.
 - Groups in Project view.
 - Pan view by dragging in visualizer window with pressed MMB.
 - OpenGL-based visualizer.
 
-Some screenshots:
+## Screenshots
 
 ![copper_clear_1.png](https://bitbucket.org/repo/zbbdpg/images/2313087322-copper_clear_1.png)
 ![copper_clear_cnc_job_1.png](https://bitbucket.org/repo/zbbdpg/images/1699766214-copper_clear_cnc_job_1.png)
