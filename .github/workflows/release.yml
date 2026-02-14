@@ -109,16 +109,10 @@ jobs:
       - name: Build package
         run: su builder -c "makepkg -sd --noconfirm --skipinteg"
 
-      - name: Rename package
-        shell: bash
-        run: |
-          VERSION=${GITHUB_REF_NAME}
-          mv flatcam-*.pkg.tar.zst "FlatCAM-${VERSION}-arch-x86_64.pkg.tar.zst"
-
       - uses: actions/upload-artifact@v4
         with:
           name: arch-build
-          path: FlatCAM-*-arch-x86_64.pkg.tar.zst
+          path: flatcam-*.pkg.tar.zst
 
   release:
     runs-on: ubuntu-latest
@@ -135,4 +129,4 @@ jobs:
           files: |
             FlatCAM-*-linux-x86_64.tar.gz
             FlatCAM-*-windows-x86_64.zip
-            FlatCAM-*-arch-x86_64.pkg.tar.zst
+            flatcam-*.pkg.tar.zst
