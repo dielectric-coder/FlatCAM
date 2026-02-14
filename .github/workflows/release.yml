@@ -95,12 +95,16 @@ jobs:
       - name: Prepare source tarball
         run: |
           VERSION=${GITHUB_REF_NAME#v}
-          sed -i "s/^pkgver=.*/pkgver=${VERSION}/" PKGBUILD
-          tar -czf "/tmp/flatcam-${VERSION}.tar.gz" \
-            --transform="s,^\.,FlatCAM-${VERSION}," \
+          # pkgver cannot contain hyphens — replace with underscores
+          PKGVER=${VERSION//-/_}
+          sed -i "s/^pkgver=.*/pkgver=${PKGVER}/" PKGBUILD
+          # Source tarball must match the name PKGBUILD expects
+          sed -i "s|^\(source=\).*|source=(\"flatcam-${PKGVER}.tar.gz\")|" PKGBUILD
+          tar -czf "/tmp/flatcam-${PKGVER}.tar.gz" \
+            --transform="s,^\.,FlatCAM-${PKGVER}," \
             --exclude='.git' .
-          mv "/tmp/flatcam-${VERSION}.tar.gz" .
-          chown builder:builder PKGBUILD "flatcam-${VERSION}.tar.gz"
+          mv "/tmp/flatcam-${PKGVER}.tar.gz" .
+          chown builder:builder PKGBUILD "flatcam-${PKGVER}.tar.gz"
 
       - name: Build package
         run: su builder -c "makepkg -sd --noconfirm --skipinteg"
