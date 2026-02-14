@@ -122,10 +122,47 @@ Gerber/Excellon File → Parse → FlatCAMObj (in collection)
   → Export G-Code → .nc/.gcode file
 ```
 
-## Building for Windows
+## Building & Releasing
+
+### PyInstaller (Linux/Windows)
+
+```bash
+pip install pyinstaller PyOpenGL PyOpenGL-accelerate
+pyinstaller flatcam.spec --noconfirm
+```
+
+Key files:
+- **`flatcam.spec`** - PyInstaller spec file (cross-platform, `--onedir` mode). Bundles `share/`, `tclCommands/`, `descartes/`, VisPy data files. Handles hidden imports for dynamically-loaded tclCommands, vispy backends, and OpenGL platform modules.
+- **`pyinstaller-hooks/runtime_hook.py`** - Sets CWD to executable directory in frozen builds so relative `share/` paths resolve correctly.
+
+### Arch/Manjaro package
+
+```bash
+makepkg -s
+sudo pacman -U flatcam-*.pkg.tar.zst
+```
+
+The **`PKGBUILD`** installs to `/opt/flatcam/` with pip-managed Python deps in `/opt/flatcam/lib/`, a `/usr/bin/flatcam` launcher, and a `.desktop` file.
+
+### CI/CD: GitHub Actions
+
+**`.github/workflows/release.yml`** triggers on `v*` tag pushes and runs three build jobs:
+- `build-linux` (ubuntu-22.04) - PyInstaller `.tar.gz`
+- `build-windows` (windows-latest) - PyInstaller `.zip`
+- `build-arch` (archlinux:latest container) - `makepkg` `.pkg.tar.zst`
+
+A `release` job then publishes all artifacts as GitHub Release assets.
+
+To create a release: `git tag v8.5 && git push origin v8.5`
+
+### Windows (cx_Freeze, legacy)
 
 ```bash
 python make_win32.py build
 ```
 
 Uses cx_Freeze to package the application with all dependencies.
+
+### Frozen build support
+
+`FlatCAMApp.py` detects `sys.frozen` (set by PyInstaller/cx_Freeze) and resolves `app_home` from `sys.executable` instead of `__file__`, so icon and data paths work correctly in bundled builds.

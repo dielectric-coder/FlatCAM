@@ -21,7 +21,19 @@ This fork has been ported from **Python 2.7 / PyQt4** to **Python 3 / PyQt5** wi
 - Light Fusion Qt style override for consistent icon visibility across desktop themes
 - Smart file-type auto-detection on the toolbar Open button
 
-### Requirements
+## Installation
+
+### Pre-built releases
+
+Download standalone executables from the [Releases](https://github.com/dielectric-coder/FlatCAM/releases) page:
+
+- **Linux** - `FlatCAM-vX.Y-linux-x86_64.tar.gz` (extract and run `./FlatCAM`)
+- **Windows** - `FlatCAM-vX.Y-windows-x86_64.zip` (extract and run `FlatCAM.exe`)
+- **Arch/Manjaro** - `flatcam-X.Y-1-x86_64.pkg.tar.zst` (install with `sudo pacman -U flatcam-*.pkg.tar.zst`, then run `flatcam`)
+
+### From source
+
+#### Requirements
 
 - Python 3.8+
 - PyQt5 >= 5.15
@@ -29,21 +41,21 @@ This fork has been ported from **Python 2.7 / PyQt4** to **Python 3 / PyQt5** wi
 - Shapely >= 1.7.1
 - NumPy, SciPy, Matplotlib, Rtree, svg.path, simplejson
 
-### Running
-
-```bash
-python3 FlatCAM.py
-```
-
-### Installing Dependencies
+#### Install dependencies
 
 ```bash
 pip3 install -r requirements.txt
 ```
 
+#### Run
+
+```bash
+python3 FlatCAM.py
+```
+
 Tested on Manjaro 26.2.
 
-### Running Tests
+## Running Tests
 
 ```bash
 # All tests
@@ -55,6 +67,30 @@ python3 -m unittest tests.test_gerber_flow
 
 # Tcl command tests
 python3 -m unittest discover tests/test_tclCommands
+```
+
+## Building
+
+### PyInstaller (Linux/Windows)
+
+```bash
+pip install pyinstaller PyOpenGL PyOpenGL-accelerate
+pyinstaller flatcam.spec --noconfirm
+```
+
+The standalone executable is created in `dist/FlatCAM/`.
+
+### Arch/Manjaro package
+
+```bash
+makepkg -s
+sudo pacman -U flatcam-*.pkg.tar.zst
+```
+
+### Windows (cx_Freeze, legacy)
+
+```bash
+python make_win32.py build
 ```
 
 ============================================
