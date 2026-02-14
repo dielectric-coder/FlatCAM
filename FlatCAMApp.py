@@ -172,8 +172,11 @@ class App(QtCore.QObject):
 
         # Application directory. Chdir to it. Otherwise, trying to load
         # GUI icons will fail as thir path is relative.
-        # This will fail under cx_freeze ...
-        self.app_home = os.path.dirname(os.path.realpath(__file__))
+        if getattr(sys, 'frozen', False):
+            # PyInstaller or cx_freeze: use the executable's directory
+            self.app_home = os.path.dirname(sys.executable)
+        else:
+            self.app_home = os.path.dirname(os.path.realpath(__file__))
         App.log.debug("Application path is " + self.app_home)
         App.log.debug("Started in " + os.getcwd())
 
